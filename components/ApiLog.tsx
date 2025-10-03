@@ -138,7 +138,7 @@ export default function ApiLog() {
 
                   {selectedEntry?.id === entry.id && (
                     <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
-                      {entry.requestBody && (
+                      {entry.requestBody !== undefined && (
                         <div>
                           <div className="text-xs font-semibold text-gray-600 mb-1">Request Body:</div>
                           <pre className="text-xs bg-gray-100 p-2 rounded overflow-x-auto">
@@ -146,7 +146,7 @@ export default function ApiLog() {
                           </pre>
                         </div>
                       )}
-                      {entry.responseBody && (
+                      {entry.responseBody !== undefined && (
                         <div>
                           <div className="text-xs font-semibold text-gray-600 mb-1">Response Body:</div>
                           <pre className="text-xs bg-gray-100 p-2 rounded overflow-x-auto max-h-[200px] overflow-y-auto">
