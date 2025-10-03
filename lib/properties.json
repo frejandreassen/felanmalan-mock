@@ -1,0 +1,1458 @@
+[
+  {
+    "id": "Strandfloen Stena Recycling",
+    "code": "",
+    "name": "Strandfloen Stena Recycling",
+    "lat": 56.90462119999999,
+    "lng": 12.4705097,
+    "address": "Åkarevägen 6, 311 32 Falkenberg, Sweden"
+  },
+  {
+    "id": "10101 Stadshuset",
+    "code": "10101 Stadshuset",
+    "name": "Stadshuset",
+    "lat": 56.904312,
+    "lng": 12.491467,
+    "address": "Rådhustorget 3c, 311 31 Falkenberg, Sweden"
+  },
+  {
+    "id": "10104 Rådhuset",
+    "code": "10104 Rådhuset",
+    "name": "Rådhuset",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10111 Brandstationen Falkenberg",
+    "code": "10111 Brandstationen Falkenberg",
+    "name": "Räddningstjänsten Falkenberg",
+    "lat": 56.91662479999999,
+    "lng": 12.507427,
+    "address": "Vingrens väg 2, 311 76 Falkenberg, Sweden"
+  },
+  {
+    "id": "10112 Brandstation Fegen",
+    "code": "10112 Brandstation Fegen",
+    "name": "Brandstation Fegen",
+    "lat": 57.1055553,
+    "lng": 13.0367485,
+    "address": "311 52 Fegen, Sweden"
+  },
+  {
+    "id": "10113 0",
+    "code": "10113 0",
+    "name": "10113 0",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10114 Brandstationen Vessigebro",
+    "code": "10114 Brandstationen Vessigebro",
+    "name": "Brandstation Vessigebro",
+    "lat": 56.97773059999999,
+    "lng": 12.6513809,
+    "address": "311 64 Vessigebro, Sweden"
+  },
+  {
+    "id": "10115 Brandstationen Ullared",
+    "code": "10115 Brandstationen Ullared",
+    "name": "Brandstation Ullared",
+    "lat": 57.1362284,
+    "lng": 12.718278,
+    "address": "Ullared, Sweden"
+  },
+  {
+    "id": "10202 Falkenbergs IH",
+    "code": "10202 Falkenbergs IH",
+    "name": "Falkenbergs Idrottshall",
+    "lat": 56.90346479999999,
+    "lng": 12.5022422,
+    "address": "Läroverksgatan 1, 311 45 Falkenberg, Sweden"
+  },
+  {
+    "id": "10203 Vinbergs IH",
+    "code": "10203 Vinbergs IH",
+    "name": "Vinbergs Idrottshall",
+    "lat": 56.94713609999999,
+    "lng": 12.5451858,
+    "address": "Apelsinvägen 9, 311 99 Vinberg, Sweden"
+  },
+  {
+    "id": "10204 Morups IH",
+    "code": "10204 Morups IH",
+    "name": "Morups Idrottshall",
+    "lat": 56.97573389999999,
+    "lng": 12.3982688,
+    "address": "Spännavägen 2, 311 90 Morup, Sweden"
+  },
+  {
+    "id": "10205 Falkenbergs Arena",
+    "code": "10205 Falkenbergs Arena",
+    "name": "Falkenbergs Arena",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10206 Vessige IH och bad",
+    "code": "10206 Vessige IH och bad",
+    "name": "Vessige Idrottshall och Bad",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10207 Ätrans Fritidsanläggning",
+    "code": "10207 Ätrans Fritidsanläggning",
+    "name": "Ätrans Fritidsanläggning",
+    "lat": 56.95974693560417,
+    "lng": 12.57195132959361,
+    "address": "Ätran, Sweden"
+  },
+  {
+    "id": "10208 Kattegattshallen",
+    "code": "10208 Kattegattshallen",
+    "name": "Kattegatthallen",
+    "lat": 56.8875974,
+    "lng": 12.4820638,
+    "address": "Bacchus väg, 311 77 Falkenberg, Sweden"
+  },
+  {
+    "id": "10209 0",
+    "code": "10209 0",
+    "name": "Slöing Idrottshall",
+    "lat": 56.8527991,
+    "lng": 12.693234,
+    "address": "311 68 Falkenberg, Sweden"
+  },
+  {
+    "id": "10211 0",
+    "code": "10211 0",
+    "name": "Hebergs Idrottshall",
+    "lat": 56.8858413,
+    "lng": 12.6314239,
+    "address": "Årstadsvägen 20, 311 96 Heberg, Sweden"
+  },
+  {
+    "id": "10212 Ullareds Idrottshall",
+    "code": "10212 Ullareds Idrottshall",
+    "name": "Ullareds Idrottshall",
+    "lat": 57.1362284,
+    "lng": 12.718278,
+    "address": "Ullared, Sweden"
+  },
+  {
+    "id": "10213 Tångaskolans Idrottshall",
+    "code": "10213 Tångaskolans Idrottshall",
+    "name": "Tånga Idrottshall",
+    "lat": 56.9176759,
+    "lng": 12.5021135,
+    "address": "154, 311 38 Falkenberg, Sweden"
+  },
+  {
+    "id": "10214 Skogstorpsskolans Idrottshall",
+    "code": "10214 Skogstorpsskolans Idrottshall",
+    "name": "Skogstorps Idrottshall",
+    "lat": 56.911176,
+    "lng": 12.434296,
+    "address": "56°54'40. 12°26'03., Kristian II:s väg 5, 262 34 Ängelholm, Sweden"
+  },
+  {
+    "id": "10215 Glommens Idrottshall",
+    "code": "10215 Glommens Idrottshall",
+    "name": "Glommens Idrottshall",
+    "lat": 56.935634,
+    "lng": 12.3746526,
+    "address": "LÅNGAVEKA 125, 311 54 Glommen, Sweden"
+  },
+  {
+    "id": "10232 Anläggningsförråd",
+    "code": "10232 Anläggningsförråd",
+    "name": "Anläggningsförråd",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10238 Laxfiskestugan",
+    "code": "10238 Laxfiskestugan",
+    "name": "Laxfiskestugan",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10240 0",
+    "code": "10240 0",
+    "name": "FORF",
+    "lat": 56.8809616,
+    "lng": 12.529143,
+    "address": "Ridhusvägen 2, 311 41 Falkenberg, Sweden"
+  },
+  {
+    "id": "10241 0",
+    "code": "10241 0",
+    "name": "Laxodlingshuset",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10245 0",
+    "code": "10245 0",
+    "name": "10245 0",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10251 Falkenbergs museum",
+    "code": "10251 Falkenbergs museum",
+    "name": "Falkenbergs museum",
+    "lat": 56.8990115,
+    "lng": 12.4948329,
+    "address": "Skepparesträtet 2, 311 74 Falkenberg, Sweden"
+  },
+  {
+    "id": "10252 Hindströmska gården",
+    "code": "10252 Hindströmska gården",
+    "name": "Hindströmska gården",
+    "lat": 56.89762409999999,
+    "lng": 12.6885498,
+    "address": "Blixtorp, 311 97 Bergvik, Sweden"
+  },
+  {
+    "id": "10253 Sjöbergs laxrökeri",
+    "code": "10253 Sjöbergs laxrökeri",
+    "name": "Sjöbergs laxrökeri",
+    "lat": 56.8924654,
+    "lng": 12.534721,
+    "address": "Birger Sjöbergs väg, 311 40 Falkenberg, Sweden"
+  },
+  {
+    "id": "10254 0",
+    "code": "10254 0",
+    "name": "Morups Tånge",
+    "lat": 56.92321699999999,
+    "lng": 12.3594922,
+    "address": "LÅNGAVEKA 115, 311 98 Glommen, Sweden"
+  },
+  {
+    "id": "10255 Ätrans Bibliotek",
+    "code": "10255 Ätrans Bibliotek",
+    "name": "Ätrans bibliotek (fd. banklokal)",
+    "lat": 57.1216433,
+    "lng": 12.9481955,
+    "address": "Televägen 9, 311 51 Ätran, Sweden"
+  },
+  {
+    "id": "10302 Vinbergsskolan inkl Gula villan",
+    "code": "10302 Vinbergsskolan inkl Gula villan",
+    "name": "Vinbergsskolan",
+    "lat": 56.9313543,
+    "lng": 12.5488612,
+    "address": "Ringare-gustavs väg 4, 311 94 Falkenberg, Sweden"
+  },
+  {
+    "id": "10303 Vessigebroskolan",
+    "code": "10303 Vessigebroskolan",
+    "name": "Vessigebroskolan",
+    "lat": 56.97476349999999,
+    "lng": 12.6700372,
+    "address": "Sjönevadsvägen 24, 311 64 Vessigebro, Sweden"
+  },
+  {
+    "id": "10304 Fajansskolan inkl. förskola",
+    "code": "10304 Fajansskolan inkl. förskola",
+    "name": "gymnastik",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10305 Schubergstorpsskolan inkl. gymnastik",
+    "code": "10305 Schubergstorpsskolan inkl. gymnastik",
+    "name": "Schubergstorpskolan",
+    "lat": 56.8983535,
+    "lng": 12.4883636,
+    "address": "Södergatan 18, 311 32 Falkenberg, Sweden"
+  },
+  {
+    "id": "10311 Tångaskolan",
+    "code": "10311 Tångaskolan",
+    "name": "Tångaskolan",
+    "lat": 56.9123731,
+    "lng": 12.4959207,
+    "address": "Tångaskolan, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "10312 Tånga Montessori",
+    "code": "10312 Tånga Montessori",
+    "name": "Falkenbergs Montessoriskola",
+    "lat": 56.9124685,
+    "lng": 12.4950456,
+    "address": "Murarevägen 50, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "10321 Tullbroskolan inkl. gymnastik",
+    "code": "10321 Tullbroskolan inkl. gymnastik",
+    "name": "Tullbroskolan",
+    "lat": 56.90302939999999,
+    "lng": 12.5005235,
+    "address": "Halmstadvägen 2, 311 45 Falkenberg, Sweden"
+  },
+  {
+    "id": "10322 Björkskolan (Nattugglans förskola)",
+    "code": "10322 Björkskolan (Nattugglans förskola)",
+    "name": "Nattugglans förskola/Björkskolan",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10331 Slöingeskolan",
+    "code": "10331 Slöingeskolan",
+    "name": "Slöingeskolan",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10332 Årstadskolan",
+    "code": "10332 Årstadskolan",
+    "name": "Årstadskolan",
+    "lat": 56.91390269999999,
+    "lng": 12.675384,
+    "address": "Hebergsvägen 15, 311 96 Heberg, Sweden"
+  },
+  {
+    "id": "10333 Söderskolan inkl Zeta",
+    "code": "10333 Söderskolan inkl Zeta",
+    "name": "Sigma",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10335 Hertingskolan",
+    "code": "10335 Hertingskolan",
+    "name": "Hertingesskolan",
+    "lat": 56.895928,
+    "lng": 12.509597,
+    "address": "Falkenberg Hertingsskolan, 311 45 Falkenberg, Sweden"
+  },
+  {
+    "id": "10336 Hjortsbergskolan",
+    "code": "10336 Hjortsbergskolan",
+    "name": "Hjortsbergsskolan",
+    "lat": 56.8876942,
+    "lng": 12.5158713,
+    "address": "Ljungholmsvägen 29, 311 41 Falkenberg, Sweden"
+  },
+  {
+    "id": "10337 Skreaskolan",
+    "code": "10337 Skreaskolan",
+    "name": "Röda Huset",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10341 Apelskolan",
+    "code": "10341 Apelskolan",
+    "name": "Apelskolan",
+    "lat": 57.1364325,
+    "lng": 12.7246679,
+    "address": "Skolvägen 12, 311 60 Ullared, Sweden"
+  },
+  {
+    "id": "10342 Fageredsskolan",
+    "code": "10342 Fageredsskolan",
+    "name": "Fageredskolan inkl Idrottshall",
+    "lat": 57.2078532,
+    "lng": 12.7574213,
+    "address": "Maavägen 1, 310 60 Ullared, Sweden"
+  },
+  {
+    "id": "10343 Älvseredsskolan",
+    "code": "10343 Älvseredsskolan",
+    "name": "Älvseredskolan inkl Gymnastiks",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10344 Okomeskolan",
+    "code": "10344 Okomeskolan",
+    "name": "Okome Skola",
+    "lat": 57.0597692,
+    "lng": 12.6920694,
+    "address": "Okomevägen 12, 311 61 Ullared, Sweden"
+  },
+  {
+    "id": "10346 Ätranskolan",
+    "code": "10346 Ätranskolan",
+    "name": "Ätranskolan",
+    "lat": 57.1243898,
+    "lng": 12.9488765,
+    "address": "Eseredsvägen 3, 311 51 Ätran, Sweden"
+  },
+  {
+    "id": "10351 Skogstorpskolan",
+    "code": "10351 Skogstorpskolan",
+    "name": "Skogstorpskolan",
+    "lat": 56.911709,
+    "lng": 12.436599,
+    "address": "Skogstorpsskolan, 311 33 Falkenberg, Sweden"
+  },
+  {
+    "id": "10352 Långavekaskolan",
+    "code": "10352 Långavekaskolan",
+    "name": "Långevekskolan",
+    "lat": 56.9347256,
+    "lng": 12.3754212,
+    "address": "LÅNGAVEKA 125, 311 54 Glommen, Sweden"
+  },
+  {
+    "id": "10354 Ljungbyskolan",
+    "code": "10354 Ljungbyskolan",
+    "name": "Ljungbyskolan inkl Bibl o Gymn",
+    "lat": 56.9814297,
+    "lng": 12.5746173,
+    "address": "Skolbacken 1, 311 95 Falkenberg, Sweden"
+  },
+  {
+    "id": "10355 Långåsskolan",
+    "code": "10355 Långåsskolan",
+    "name": "Långåsskolan",
+    "lat": 56.9785239,
+    "lng": 12.4436579,
+    "address": "Morupsvägen 11, 311 93 Långås, Sweden"
+  },
+  {
+    "id": "10356 Långåsskolan ny byggnad",
+    "code": "10356 Långåsskolan ny byggnad",
+    "name": "Långåsskolan (nya skolbyggnad)",
+    "lat": 56.9785239,
+    "lng": 12.4436579,
+    "address": "Morupsvägen 11, 311 93 Långås, Sweden"
+  },
+  {
+    "id": "10360 Gymn hus 3",
+    "code": "10360 Gymn hus 3",
+    "name": "Gymnasieskolan Hus 3",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10361 Gymn hus 1 inkl. IH",
+    "code": "10361 Gymn hus 1 inkl. IH",
+    "name": "Gymnasieskolan Hus 1",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10363 Gymn hus 5",
+    "code": "10363 Gymn hus 5",
+    "name": "Gymnasieskolan Hus 5",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10364 Gymn hus 6 (matsal)",
+    "code": "10364 Gymn hus 6 (matsal)",
+    "name": "Gymnasieskolan Hus 6 Matsal",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10365 Gymn hus 7 (fritidens hus)",
+    "code": "10365 Gymn hus 7 (fritidens hus)",
+    "name": "Gymnasieskolan Hus 7",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10366 Gymn Gula Villan",
+    "code": "10366 Gymn Gula Villan",
+    "name": "Gymnasieskolan Gula Villan",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10367 Gymn Hus 12 (NTC)",
+    "code": "10367 Gymn Hus 12 (NTC)",
+    "name": "Gymnasieskolan Hus 12",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10368 Gymn Hus 20",
+    "code": "10368 Gymn Hus 20",
+    "name": "Gymnasieskolan Hus 20",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10369 Gymn Hus 2 Argus",
+    "code": "10369 Gymn Hus 2 Argus",
+    "name": "Gymnasieskolan Hus 2 Argus",
+    "lat": 56.9061923,
+    "lng": 12.4905402,
+    "address": "Holgersgatan 7B, 311 35 Falkenberg, Sweden"
+  },
+  {
+    "id": "10371 Musikskolan (Ga Badhuset)",
+    "code": "10371 Musikskolan (Ga Badhuset)",
+    "name": "Gamla Badhuset",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10404 Prästgården",
+    "code": "10404 Prästgården",
+    "name": "Prästgården/Navigatorcentrum",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10408 Tånga förskola Montessori",
+    "code": "10408 Tånga förskola Montessori",
+    "name": "Tånga Montessoriförskola",
+    "lat": 56.9176759,
+    "lng": 12.5021135,
+    "address": "154, 311 38 Falkenberg, Sweden"
+  },
+  {
+    "id": "10409 Slättens förskola",
+    "code": "10409 Slättens förskola",
+    "name": "Slättens Förskola",
+    "lat": 56.89559689999999,
+    "lng": 12.5308485,
+    "address": "Slättenvägen 1, 311 40 Falkenberg, Sweden"
+  },
+  {
+    "id": "10410 Ängens förskola",
+    "code": "10410 Ängens förskola",
+    "name": "Ängens förskola",
+    "lat": 56.8862867,
+    "lng": 12.5154548,
+    "address": "Ängsstigen 1B, 311 41 Falkenberg, Sweden"
+  },
+  {
+    "id": "10416 Furubackens förskola",
+    "code": "10416 Furubackens förskola",
+    "name": "Furubackens förskola",
+    "lat": 57.1379033,
+    "lng": 12.7169032,
+    "address": "Furuvägen 5, 311 60 Ullared, Sweden"
+  },
+  {
+    "id": "10417 Okome förskola",
+    "code": "10417 Okome förskola",
+    "name": "Okome Förskola",
+    "lat": 57.0576784,
+    "lng": 12.6931982,
+    "address": "311 61 Okome, Sweden"
+  },
+  {
+    "id": "10420 Tullbro förskola",
+    "code": "10420 Tullbro förskola",
+    "name": "Tullbro Förskola",
+    "lat": 56.9030338,
+    "lng": 12.4945047,
+    "address": "Brogatan, 311 31 Falkenberg, Sweden"
+  },
+  {
+    "id": "10421 Skansgårdens förskola",
+    "code": "10421 Skansgårdens förskola",
+    "name": "Skansgårdens Förskola",
+    "lat": 56.8525508,
+    "lng": 12.6951773,
+    "address": "Rapsvägen 3, 311 68 Slöinge, Sweden"
+  },
+  {
+    "id": "10423 Ljungby förskola",
+    "code": "10423 Ljungby förskola",
+    "name": "Ljungby Förskola",
+    "lat": 56.9816656,
+    "lng": 12.5767918,
+    "address": "Tallbackevägen 1, 311 95 Falkenberg, Sweden"
+  },
+  {
+    "id": "10424 Fredens förskola (Ur & Skur)",
+    "code": "10424 Fredens förskola (Ur & Skur)",
+    "name": "I Ur & Skur förskola/Fredens förskola",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10425 Hjorthagens förskola",
+    "code": "10425 Hjorthagens förskola",
+    "name": "Hjorthagens Förskola",
+    "lat": 56.88761539999999,
+    "lng": 12.5160158,
+    "address": "Ljungholmsvägen 29, 311 41 Falkenberg, Sweden"
+  },
+  {
+    "id": "10426 Vitklöverns förskola",
+    "code": "10426 Vitklöverns förskola",
+    "name": "Vitklöverns Förskola",
+    "lat": 56.9128501,
+    "lng": 12.4270438,
+    "address": "Vitklövervägen 10, 311 33 Falkenberg, Sweden"
+  },
+  {
+    "id": "10427 Tröingebergs förskola",
+    "code": "10427 Tröingebergs förskola",
+    "name": "Tröingebergs Förskola",
+    "lat": 56.91652509999999,
+    "lng": 12.5252865,
+    "address": "Tröingeberg, Falkenberg, Sweden"
+  },
+  {
+    "id": "10429 Morups förskola",
+    "code": "10429 Morups förskola",
+    "name": "Morups Förskola",
+    "lat": 56.9782929,
+    "lng": 12.395993,
+    "address": "Noréus väg 29, 311 90 Morup, Sweden"
+  },
+  {
+    "id": "10431 Östra gärdets förskola",
+    "code": "10431 Östra gärdets förskola",
+    "name": "Östra Gärdets Förskola",
+    "lat": 56.91133439999999,
+    "lng": 12.5030029,
+    "address": "Utmarksvägen 12, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "10433 Vessigebro förskola",
+    "code": "10433 Vessigebro förskola",
+    "name": "Vessigebro Förskola",
+    "lat": 56.9743854,
+    "lng": 12.6721803,
+    "address": "Sjönevadsvägen 24B, 311 64 Vessigebro, Sweden"
+  },
+  {
+    "id": "10434 Tångalyckans förskola (fd Kompisen)",
+    "code": "10434 Tångalyckans förskola (fd Kompisen)",
+    "name": "Tångalyckans förskola",
+    "lat": 56.9120948,
+    "lng": 12.4954958,
+    "address": "Murarevägen 44, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "10435 Solhagens förskola",
+    "code": "10435 Solhagens förskola",
+    "name": "Solhagens förskola",
+    "lat": 56.9096431,
+    "lng": 12.4764843,
+    "address": "Solhagavägen 1, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "10436 Hällinge förskola",
+    "code": "10436 Hällinge förskola",
+    "name": "Hällinge Förskola",
+    "lat": 56.9162946,
+    "lng": 12.5269955,
+    "address": "Olofsbergsvägen 2, 311 38 Falkenberg, Sweden"
+  },
+  {
+    "id": "10437 Vinbergs förskola",
+    "code": "10437 Vinbergs förskola",
+    "name": "Vinbergs Förskola",
+    "lat": 56.9477078,
+    "lng": 12.5423006,
+    "address": "311 99 Vinberg, Sweden"
+  },
+  {
+    "id": "10438 Werners Hage förskola",
+    "code": "10438 Werners Hage förskola",
+    "name": "Werners Hage Förskola",
+    "lat": 56.9155679,
+    "lng": 12.5114211,
+    "address": "Valthornsvägen 1, 311 76 Falkenberg, Sweden"
+  },
+  {
+    "id": "10439 Dals Ängars förskola",
+    "code": "10439 Dals Ängars förskola",
+    "name": "Dals Ängars Förskola",
+    "lat": 56.9230041,
+    "lng": 12.5173341,
+    "address": "Skärslidarna 100, 311 76 Falkenberg, Sweden"
+  },
+  {
+    "id": "10440 Tallkottens förskola",
+    "code": "10440 Tallkottens förskola",
+    "name": "Tallkottens Förskola",
+    "lat": 56.901664,
+    "lng": 12.5072925,
+    "address": "311 48 Falkenberg, Sweden"
+  },
+  {
+    "id": "10441 Slöinge förskola",
+    "code": "10441 Slöinge förskola",
+    "name": "Slöinge Förskola",
+    "lat": 56.852981,
+    "lng": 12.6961935,
+    "address": "Alsins väg 5, 311 68 Slöinge, Sweden"
+  },
+  {
+    "id": "10442 0",
+    "code": "10442 0",
+    "name": "Hebergs Förskola",
+    "lat": 56.8903475,
+    "lng": 12.6289941,
+    "address": "Heberg 318, 311 96 Heberg, Sweden"
+  },
+  {
+    "id": "10443 Skogstorps förskola",
+    "code": "10443 Skogstorps förskola",
+    "name": "Skogstorps Förskola",
+    "lat": 56.9110287,
+    "lng": 12.4369135,
+    "address": "Violvägen 10, 311 33 Falkenberg, Sweden"
+  },
+  {
+    "id": "10444 0",
+    "code": "10444 0",
+    "name": "Bokens Förskola",
+    "lat": 56.8982436,
+    "lng": 12.486566,
+    "address": "311 73 Falkenberg, Sweden"
+  },
+  {
+    "id": "10445 Eldstadens förskola",
+    "code": "10445 Eldstadens förskola",
+    "name": "Eldstadens förskola",
+    "lat": 56.894082,
+    "lng": 12.5146684,
+    "address": "Skogsvägen 5, 311 46 Falkenberg, Sweden"
+  },
+  {
+    "id": "10502 Boken",
+    "code": "10502 Boken",
+    "name": "Boken",
+    "lat": 56.8984185,
+    "lng": 12.4871108,
+    "address": "Södergatan 22, 311 32 Falkenberg, Sweden"
+  },
+  {
+    "id": "10504 Björkhaga",
+    "code": "10504 Björkhaga",
+    "name": "Björkhaga",
+    "lat": 56.8554299,
+    "lng": 12.6860963,
+    "address": "Björkgatan 3, 311 68 Slöinge, Sweden"
+  },
+  {
+    "id": "10505 Tallgläntan",
+    "code": "10505 Tallgläntan",
+    "name": "Tallgläntan",
+    "lat": 56.9022503,
+    "lng": 12.5073116,
+    "address": "Halmstadvägen 18, 311 48 Falkenberg, Sweden"
+  },
+  {
+    "id": "10511 Gruppbostad Ljungby och Rönnås",
+    "code": "10511 Gruppbostad Ljungby och Rönnås",
+    "name": "Gruppbostad Ljungby o Rönnås",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10512 Gruppbostad Baldersvägen",
+    "code": "10512 Gruppbostad Baldersvägen",
+    "name": "Gruppbostad Baldersvägen",
+    "lat": 56.8877748,
+    "lng": 12.5075242,
+    "address": "Baldersvägen, 311 42 Falkenberg, Sweden"
+  },
+  {
+    "id": "10513 Gruppbostad Slöinge",
+    "code": "10513 Gruppbostad Slöinge",
+    "name": "Gruppbostad Bertevägen",
+    "lat": 56.851411,
+    "lng": 12.6863251,
+    "address": "Bertevägen, 311 68 Slöinge, Sweden"
+  },
+  {
+    "id": "10516 Gruppbostad Valhall",
+    "code": "10516 Gruppbostad Valhall",
+    "name": "Gruppbostad Ciceronen",
+    "lat": 56.9117767,
+    "lng": 12.4719513,
+    "address": "Berguvsvägen 7, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "10517 Gruppbostad Vesslevägen",
+    "code": "10517 Gruppbostad Vesslevägen",
+    "name": "Gruppbostad Vesslevägen",
+    "lat": 56.8885438,
+    "lng": 12.5214899,
+    "address": "Vesslevägen, 311 41 Falkenberg, Sweden"
+  },
+  {
+    "id": "10518 Gruppbostad Rimmarevägen",
+    "code": "10518 Gruppbostad Rimmarevägen",
+    "name": "Gruppbostad Rimrneravägen",
+    "lat": 56.9139996,
+    "lng": 12.5226541,
+    "address": "Rimmarevägen, 311 38 Falkenberg, Sweden"
+  },
+  {
+    "id": "10519 Gruppbostad Laxvägen",
+    "code": "10519 Gruppbostad Laxvägen",
+    "name": "Gruppbostad Laxvägen",
+    "lat": 56.9790727,
+    "lng": 12.6539603,
+    "address": "Laxvägen, 311 64 Vessigebro, Sweden"
+  },
+  {
+    "id": "10520 Gruppbostad Högabergsvägen",
+    "code": "10520 Gruppbostad Högabergsvägen",
+    "name": "Gruppbostad Högabergsvägen",
+    "lat": 56.8784796,
+    "lng": 12.5359789,
+    "address": "Högabergsvägen, 311 72 Falkenberg, Sweden"
+  },
+  {
+    "id": "10521 Gruppbostad Slätten",
+    "code": "10521 Gruppbostad Slätten",
+    "name": "Gruppbostad Slätten",
+    "lat": 56.88985,
+    "lng": 12.531639,
+    "address": "Falkenberg Slätten, 311 40 Falkenberg, Sweden"
+  },
+  {
+    "id": "10523 Gruppbostad Fjällvråken",
+    "code": "10523 Gruppbostad Fjällvråken",
+    "name": "Gruppbostad Hjällvråken",
+    "lat": 56.9117767,
+    "lng": 12.4719513,
+    "address": "Berguvsvägen 7, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "10531 Murarevägens dagcenter",
+    "code": "10531 Murarevägens dagcenter",
+    "name": "Murarevägens dagcentral",
+    "lat": 56.9109548,
+    "lng": 12.496283,
+    "address": "Murarevägen, Falkenberg, Sweden"
+  },
+  {
+    "id": "10532 Hjälpmedelcentralen",
+    "code": "10532 Hjälpmedelcentralen",
+    "name": "Hjälpmedelcentralen",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10541 0",
+    "code": "10541 0",
+    "name": "Bostadsmoduler FEB/LSS Lindhultsvägen 29A och 29B",
+    "lat": 56.9724611,
+    "lng": 12.4564487,
+    "address": "Lindhultsvägen 29A, 311 93 Långås, Sweden"
+  },
+  {
+    "id": "10612 Länken",
+    "code": "10612 Länken",
+    "name": "Länken",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10614 Café Rosengård",
+    "code": "10614 Café Rosengård",
+    "name": "Vallarna",
+    "lat": 56.9057588,
+    "lng": 12.5047266,
+    "address": "Läroverksgatan 1, 311 45 Falkenberg, Sweden"
+  },
+  {
+    "id": "10621 Gamla Ätranverken",
+    "code": "10621 Gamla Ätranverken",
+    "name": "Gamla Ätranverken/Smedjan",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10622 Sjöbutiken Lotsen",
+    "code": "10622 Sjöbutiken Lotsen",
+    "name": "Sjöbutiken Lotsen",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10625 Röda Korsstugan",
+    "code": "10625 Röda Korsstugan",
+    "name": "Röda korsstugan",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10626 RIA-gården",
+    "code": "10626 RIA-gården",
+    "name": "RIA gården",
+    "lat": 56.89762409999999,
+    "lng": 12.6885498,
+    "address": "Blixtorp, 311 97 Bergvik, Sweden"
+  },
+  {
+    "id": "10628 St Lars (Laxen 7)",
+    "code": "10628 St Lars (Laxen 7)",
+    "name": "Kyrkgatan 12",
+    "lat": 56.865,
+    "lng": 12.7597782,
+    "address": "Kyrkogatan, Sweden"
+  },
+  {
+    "id": "10629 St Lars Museum",
+    "code": "10629 St Lars Museum",
+    "name": "Kyrkgatan 8",
+    "lat": 56.865,
+    "lng": 12.7597782,
+    "address": "Kyrkogatan, Sweden"
+  },
+  {
+    "id": "10630 Erikssonska torpet",
+    "code": "10630 Erikssonska torpet",
+    "name": "Erikssonska Torpet",
+    "lat": 57.116667,
+    "lng": 12.7,
+    "address": "311 61 Torp, Sweden"
+  },
+  {
+    "id": "10632 Mårtenssonska",
+    "code": "10632 Mårtenssonska",
+    "name": "Mårtenssonska Torpet",
+    "lat": 57.116667,
+    "lng": 12.7,
+    "address": "311 61 Torp, Sweden"
+  },
+  {
+    "id": "10641 0",
+    "code": "10641 0",
+    "name": "Vinbergs gamla station",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10652 0",
+    "code": "10652 0",
+    "name": "Fotomuseum",
+    "lat": 56.92140569999999,
+    "lng": 12.5238422,
+    "address": "Karl Salomonssons väg 9, 311 78 Falkenberg, Sweden"
+  },
+  {
+    "id": "10659 0",
+    "code": "10659 0",
+    "name": "10659 0",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10660 Familjecentral Skogstorp",
+    "code": "10660 Familjecentral Skogstorp",
+    "name": "Familjecentral Skogstorp",
+    "lat": 56.9125996,
+    "lng": 12.4375004,
+    "address": "Violvägen 9B, 311 33 Falkenberg, Sweden"
+  },
+  {
+    "id": "10662 Kronans Parkeringshus",
+    "code": "10662 Kronans Parkeringshus",
+    "name": "Kronan Parkeringshus",
+    "lat": 56.90313639999999,
+    "lng": 12.4915536,
+    "address": "Brogatan 3, 311 31 Falkenberg, Sweden"
+  },
+  {
+    "id": "10664 Borret (Resurscentrum)",
+    "code": "10664 Borret (Resurscentrum)",
+    "name": "Borret (Resurscentrum)",
+    "lat": 56.9112312,
+    "lng": 12.4958629,
+    "address": "Murarevägen 36, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "10701 Samlingssal Långås",
+    "code": "10701 Samlingssal Långås",
+    "name": "Långås Samlingssal",
+    "lat": 56.9764326,
+    "lng": 12.4518357,
+    "address": "311 93 Långås, Sweden"
+  },
+  {
+    "id": "10808 0",
+    "code": "10808 0",
+    "name": "Hästhagsudden 110",
+    "lat": 56.8991999,
+    "lng": 12.4336506,
+    "address": "HÄSTHAGSUDDEN 110, 311 91 Falkenberg, Sweden"
+  },
+  {
+    "id": "10811 0",
+    "code": "10811 0",
+    "name": "Smedjeholm 320",
+    "lat": 56.9019796,
+    "lng": 12.4514758,
+    "address": "Falkenberg 320, 311 32 Falkenberg, Sweden"
+  },
+  {
+    "id": "10812 Sanddynevägen 95",
+    "code": "10812 Sanddynevägen 95",
+    "name": "Sanddynevägen 95",
+    "lat": 57.0788544,
+    "lng": 12.2673523,
+    "address": "Sanddynevägen 95, 432 54 Varberg, Sweden"
+  },
+  {
+    "id": "10815 0",
+    "code": "10815 0",
+    "name": "Hästhagsudden 103",
+    "lat": 56.8995016,
+    "lng": 12.441061,
+    "address": "HÄSTHAGSUDDEN 103, 311 91 Falkenberg, Sweden"
+  },
+  {
+    "id": "10816 Hästhagsudden 106 (Rönnborg)",
+    "code": "10816 Hästhagsudden 106 (Rönnborg)",
+    "name": "Hästhagsudden 106",
+    "lat": 56.89941589999999,
+    "lng": 12.4398088,
+    "address": "HÄSTHAGSUDDEN 106, 311 91 Falkenberg, Sweden"
+  },
+  {
+    "id": "10820 Hästhagsudden 102 (Herta Berggren)",
+    "code": "10820 Hästhagsudden 102 (Herta Berggren)",
+    "name": "Hästhagsudden 102",
+    "lat": 56.8998006,
+    "lng": 12.4405832,
+    "address": "HÄSTHAGSUDDEN 102, 311 91 Falkenberg, Sweden"
+  },
+  {
+    "id": "10851 Ohlsgården",
+    "code": "10851 Ohlsgården",
+    "name": "Ohlsgården Långaveka 4:1",
+    "lat": 56.9339118,
+    "lng": 12.3754505,
+    "address": "Långaveka, 311 54 Glommen, Sweden"
+  },
+  {
+    "id": "10852 0",
+    "code": "10852 0",
+    "name": "Motor 13 - Falkenbergs kommun",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10853 0",
+    "code": "10853 0",
+    "name": "Fbg Seafood",
+    "lat": 56.9011101,
+    "lng": 12.4947903,
+    "address": "S:t Lars kyrkogata 8, 311 31 Falkenberg, Sweden"
+  },
+  {
+    "id": "10856 0",
+    "code": "10856 0",
+    "name": "Gjuteriet 1 Falkenbergs kommun",
+    "lat": 56.9053212,
+    "lng": 12.459654,
+    "address": "Åkarevägen 18, 311 32 Falkenberg, Sweden"
+  },
+  {
+    "id": "10857 Knavagård",
+    "code": "10857 Knavagård",
+    "name": "Knavagård",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10858 0",
+    "code": "10858 0",
+    "name": "10858 0",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10860 0",
+    "code": "10860 0",
+    "name": "Andreasgården",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10861 Rasmusgården",
+    "code": "10861 Rasmusgården",
+    "name": "Rasmusgården",
+    "lat": 56.88900580000001,
+    "lng": 12.5798315,
+    "address": "Skrea Bondagård 206, 311 97 Falkenberg, Sweden"
+  },
+  {
+    "id": "10863 0",
+    "code": "10863 0",
+    "name": "10863 0",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10910 Hertingskolan",
+    "code": "10910 Hertingskolan",
+    "name": "Paviljong kök och matsal",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "10915 Vinbergsskolan extern paviljong",
+    "code": "10915 Vinbergsskolan extern paviljong",
+    "name": "Vinbergsskolans paviljong",
+    "lat": 56.9313543,
+    "lng": 12.5488612,
+    "address": "Ringare-gustavs väg 4, 311 94 Falkenberg, Sweden"
+  },
+  {
+    "id": "10916 Fajansskolans paviljong",
+    "code": "10916 Fajansskolans paviljong",
+    "name": "Fajansskolans paviljong",
+    "lat": 56.9071205,
+    "lng": 12.5112886,
+    "address": "Knut Hands väg 1, 311 37 Falkenberg, Sweden"
+  },
+  {
+    "id": "10918 Hjortsbergskolan Paviljong",
+    "code": "10918 Hjortsbergskolan Paviljong",
+    "name": "Hjortsbergsskolan Paviljong",
+    "lat": 56.8876942,
+    "lng": 12.5158713,
+    "address": "Ljungholmsvägen 29, 311 41 Falkenberg, Sweden"
+  },
+  {
+    "id": "10920 Vinbergsskolan extern paviljong",
+    "code": "10920 Vinbergsskolan extern paviljong",
+    "name": "Vinbergsskolans paviljong",
+    "lat": 56.9313543,
+    "lng": 12.5488612,
+    "address": "Ringare-gustavs väg 4, 311 94 Falkenberg, Sweden"
+  },
+  {
+    "id": "10950 Violens förskola",
+    "code": "10950 Violens förskola",
+    "name": "Violens Förskola",
+    "lat": 56.9117391,
+    "lng": 12.4386025,
+    "address": "Violvägen 8A, 311 33 Falkenberg, Sweden"
+  },
+  {
+    "id": "10952 Stafsinge förskolepaviljong",
+    "code": "10952 Stafsinge förskolepaviljong",
+    "name": "Stafsinge förskolepaviljong",
+    "lat": 56.916667,
+    "lng": 12.483333,
+    "address": "311 39 Stafsinge, Sweden"
+  },
+  {
+    "id": "10953 Kristineslätts förskolepaviljong",
+    "code": "10953 Kristineslätts förskolepaviljong",
+    "name": "Kristineslätt förskolepaviljong",
+    "lat": 56.8895931,
+    "lng": 12.5160949,
+    "address": "Monarkivägen, 311 46 Falkenberg, Sweden"
+  },
+  {
+    "id": "10958 Eldstadens förskolepaviljong",
+    "code": "10958 Eldstadens förskolepaviljong",
+    "name": "Eldstadens förskolepaviljong",
+    "lat": 56.894082,
+    "lng": 12.5146684,
+    "address": "Skogsvägen 5, 311 46 Falkenberg, Sweden"
+  },
+  {
+    "id": "BERGUVSVÄGEN 7",
+    "code": "BERGUVSVÄGEN 7",
+    "name": "Gruppbostad Berguvsvägen 7",
+    "lat": 56.9117767,
+    "lng": 12.4719513,
+    "address": "Berguvsvägen 7, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "BERGUVSVÄGEN 9",
+    "code": "BERGUVSVÄGEN 9",
+    "name": "Berguvens äldreboende",
+    "lat": 56.9118769,
+    "lng": 12.4731327,
+    "address": "Berguvsvägen 9, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "DRIVBÄNKEN",
+    "code": "DRIVBÄNKEN",
+    "name": "Möllegatan garage",
+    "lat": 56.9050024,
+    "lng": 12.4878831,
+    "address": "Möllegatan, Falkenberg, Sweden"
+  },
+  {
+    "id": "FLORAGATAN 1",
+    "code": "FLORAGATAN 1",
+    "name": "3",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "FURUGÅRDEN",
+    "code": "FURUGÅRDEN",
+    "name": "Furugården",
+    "lat": 57.13818610000001,
+    "lng": 12.7167671,
+    "address": "Furuvägen 7, 311 60 Ullared, Sweden"
+  },
+  {
+    "id": "FURUGÅRDEN-1",
+    "code": "FURUGÅRDEN",
+    "name": "Furugården kök",
+    "lat": 57.13818610000001,
+    "lng": 12.7167671,
+    "address": "Furuvägen 7, 311 60 Ullared, Sweden"
+  },
+  {
+    "id": "HOLGERSGATAN 5 A",
+    "code": "HOLGERSGATAN 5 A",
+    "name": "Gruppbostad Holgersgatan 5",
+    "lat": 56.9072772,
+    "lng": 12.4944481,
+    "address": "Holgersgatan 5N, 311 35 Falkenberg, Sweden"
+  },
+  {
+    "id": "IGELDAMMSVÄGEN 1",
+    "code": "IGELDAMMSVÄGEN 1",
+    "name": "Gymnasieskola Hus 8",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "IGELDAMSVÄGEN 1",
+    "code": "IGELDAMSVÄGEN 1",
+    "name": "Parkeringsgarage",
+    "lat": 56.9101996,
+    "lng": 12.4736036,
+    "address": "Ormvråksvägen 11-13, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "KLOCKAREGATAN 27",
+    "code": "KLOCKAREGATAN 27",
+    "name": "Hållbarhetshuset",
+    "lat": 56.9093057,
+    "lng": 12.4934833,
+    "address": "Klockaregatan 27 B, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "KLOCKAREGATAN 27-1",
+    "code": "KLOCKAREGATAN 27",
+    "name": "Serviceförvaltningen Klockaregatan",
+    "lat": 56.9093156,
+    "lng": 12.4924249,
+    "address": "Klockaregatan 27, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "KVARNVÄGEN 17",
+    "code": "KVARNVÄGEN 17",
+    "name": "Mötesplats Morup",
+    "lat": 56.9812007,
+    "lng": 12.3961751,
+    "address": "311 90 Morup, Sweden"
+  },
+  {
+    "id": "LJUNGHOLMSVÄGEN 26",
+    "code": "LJUNGHOLMSVÄGEN 26",
+    "name": "Hjortsbergs äldreboende",
+    "lat": 56.88388459999999,
+    "lng": 12.5163019,
+    "address": "311 41 Hjortsberg, Sweden"
+  },
+  {
+    "id": "LJUNGHOLMSVÄGEN 28 A",
+    "code": "LJUNGHOLMSVÄGEN 28 A",
+    "name": "Serviceboende Ljungholmsvägen",
+    "lat": 56.8878727,
+    "lng": 12.5144118,
+    "address": "Ljungholmsvägen, Falkenberg, Sweden"
+  },
+  {
+    "id": "LJUNGHOLMSVÄGEN 28-30",
+    "code": "LJUNGHOLMSVÄGEN 28-30",
+    "name": "Mötesplats Hjortsberg",
+    "lat": 56.88388459999999,
+    "lng": 12.5163019,
+    "address": "311 41 Hjortsberg, Sweden"
+  },
+  {
+    "id": "LJUNGHOLMSVÄGEN 30 B",
+    "code": "LJUNGHOLMSVÄGEN 30 B",
+    "name": "Gruppbostad Ljungholmsvägen 30",
+    "lat": 56.889165,
+    "lng": 12.5141491,
+    "address": "Ljungholmsvägen 30E, 311 46 Falkenberg, Sweden"
+  },
+  {
+    "id": "MARKNADSVÄGEN 3 A",
+    "code": "MARKNADSVÄGEN 3 A",
+    "name": "Marknadsvägen 3",
+    "lat": 56.97994259999999,
+    "lng": 12.3934529,
+    "address": "Marknadsvägen 3, 311 90 Morup, Sweden"
+  },
+  {
+    "id": "MÖLLEGATAN 11 A",
+    "code": "MÖLLEGATAN 11 A",
+    "name": "Hemtjänst Centrum",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "MÖLLEGATAN 11A",
+    "code": "MÖLLEGATAN 11A",
+    "name": "Vision Mölle",
+    "lat": 56.90449150000001,
+    "lng": 12.487343,
+    "address": "311 47 Falkenberg, Sweden"
+  },
+  {
+    "id": "NYHEMS PLAN 1",
+    "code": "NYHEMS PLAN 1",
+    "name": "Falkhallen",
+    "lat": 56.9073175,
+    "lng": 12.4921074,
+    "address": "NYHEMS PLAN 1, 311 35 Falkenberg, Sweden"
+  },
+  {
+    "id": "ORMVRÅKSVÄGEN 12",
+    "code": "ORMVRÅKSVÄGEN 12",
+    "name": "Ormvråksvägen 12",
+    "lat": 56.9110389,
+    "lng": 12.4729497,
+    "address": "Ormvråksvägen 12, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "PORSEVÄGEN 2",
+    "code": "PORSEVÄGEN 2",
+    "name": "Gruppbostad Porsevägen",
+    "lat": 56.9012264,
+    "lng": 12.4842413,
+    "address": "Porsevägen, 311 74 Falkenberg, Sweden"
+  },
+  {
+    "id": "RINGVÄGEN 13 B-C",
+    "code": "RINGVÄGEN 13 B-C",
+    "name": "Trädgårdens dagverksamhet",
+    "lat": 56.9043632,
+    "lng": 12.4639986,
+    "address": "Trädgård, Åkarevägen 10, 311 32 Falkenberg, Sweden"
+  },
+  {
+    "id": "SOLHAGAVÄGEN 30",
+    "code": "SOLHAGAVÄGEN 30",
+    "name": "Solhaga äldreboende",
+    "lat": 56.9135121,
+    "lng": 12.4799609,
+    "address": "Solhagavägen 30, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "STAFSINGEVÄGEN 60-80",
+    "code": "STAFSINGEVÄGEN 60-80",
+    "name": "Gruppbostad Stafsingevägen",
+    "lat": 56.9117767,
+    "lng": 12.4719513,
+    "address": "Berguvsvägen 7, 311 39 Falkenberg, Sweden"
+  },
+  {
+    "id": "STENFALKSVÄGEN 33",
+    "code": "STENFALKSVÄGEN 33",
+    "name": "Stenfalken Ung Fbg",
+    "lat": 56.90273329999999,
+    "lng": 12.4888013,
+    "address": "Falkenberg, Sweden"
+  },
+  {
+    "id": "TURBINGRÄND 10",
+    "code": "TURBINGRÄND 10",
+    "name": "Turbingränd hemtjänst",
+    "lat": 56.8993517,
+    "lng": 12.5221112,
+    "address": "Turbingränd, 311 48 Falkenberg, Sweden"
+  },
+  {
+    "id": "TURBINGRÄND 11",
+    "code": "TURBINGRÄND 11",
+    "name": "Turbingränd Funktionsstöd",
+    "lat": 56.8993517,
+    "lng": 12.5221112,
+    "address": "Turbingränd, 311 48 Falkenberg, Sweden"
+  },
+  {
+    "id": "TURBINGRÄND 12",
+    "code": "TURBINGRÄND 12",
+    "name": "Hertings gårds förskola",
+    "lat": 56.901037,
+    "lng": 12.5203932,
+    "address": "Elvägen 4, 311 48 Falkenberg, Sweden"
+  },
+  {
+    "id": "UTMARKSVÄGEN 9 E",
+    "code": "UTMARKSVÄGEN 9 E",
+    "name": "Gullvivans öppna förskola",
+    "lat": 56.91178189999999,
+    "lng": 12.50556,
+    "address": "Utmarksvägen 9F, 311 36 Falkenberg, Sweden"
+  },
+  {
+    "id": "VARBERGSVÄGEN 3 C",
+    "code": "VARBERGSVÄGEN 3 C",
+    "name": "Ullared coworking",
+    "lat": 57.1362284,
+    "lng": 12.718278,
+    "address": "Ullared, Sweden"
+  },
+  {
+    "id": "ÄTRANHEMMET",
+    "code": "ÄTRANHEMMET",
+    "name": "Ätranhemmet",
+    "lat": 57.1203492,
+    "lng": 12.9487819,
+    "address": "Halmstadvägen 1C, 311 51 Ätran, Sweden"
+  }
+]
