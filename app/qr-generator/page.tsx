@@ -1,17 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import QRCode from 'qrcode';
 import { properties, getRoomsForProperty, categories, type Property } from '@/lib/data';
 import Combobox from '@/components/Combobox';
 import MapDialog from '@/components/MapDialog';
 import Header from '@/components/Header';
-
-interface QRCodeConfig {
-  property: Property;
-  location?: string;
-  room?: string;
-}
 
 export default function QRGeneratorPage() {
   const [selectedPropertyId, setSelectedPropertyId] = useState('');
@@ -269,7 +264,7 @@ export default function QRGeneratorPage() {
 
                     <div className="flex justify-center mb-6">
                       {qrCodeUrl && (
-                        <img src={qrCodeUrl} alt="QR Code" className="border-4 border-gray-200 rounded-lg" />
+                        <Image src={qrCodeUrl} alt="QR Code" width={600} height={600} className="border-4 border-gray-200 rounded-lg" />
                       )}
                       <canvas ref={canvasRef} className="hidden" />
                     </div>
@@ -316,11 +311,11 @@ export default function QRGeneratorPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-blue-800">
               <div>
                 <h4 className="font-semibold mb-2">1. Generera QR-kod</h4>
-                <p>Välj fastighet och eventuellt specifik lokal/rum. Klicka på "Generera QR-kod".</p>
+                <p>Välj fastighet och eventuellt specifik lokal/rum. Klicka på &quot;Generera QR-kod&quot;.</p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">2. Skriv ut eller ladda ner</h4>
-                <p>Använd "Skriv ut" för fysisk skyltning eller "Ladda ner" för digital användning.</p>
+                <p>Använd &quot;Skriv ut&quot; för fysisk skyltning eller &quot;Ladda ner&quot; för digital användning.</p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">3. Placera QR-koden</h4>

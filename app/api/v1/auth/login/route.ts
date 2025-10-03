@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         name: 'Mock User'
       }
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Invalid request' },
       { status: 400 }
