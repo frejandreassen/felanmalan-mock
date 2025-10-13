@@ -3,14 +3,18 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import QRCode from 'qrcode';
-import { properties, getRoomsForProperty, categories, type Property } from '@/lib/data';
+import { getRoomsForProperty, categories } from '@/lib/data';
+import { objekt as objektList, type Objekt } from '@/lib/fastaStrukturenStore';
 import Combobox from '@/components/Combobox';
 import MapDialog from '@/components/MapDialog';
 import Header from '@/components/Header';
 
+// Convert Objekt to the format expected by old components
+const properties = objektList;
+
 export default function QRGeneratorPage() {
   const [selectedPropertyId, setSelectedPropertyId] = useState('');
-  const [selectedProperty, setSelectedProperty] = useState<Property | undefined>(undefined);
+  const [selectedProperty, setSelectedProperty] = useState<Objekt | undefined>(undefined);
   const [selectedLocation, setSelectedLocation] = useState('inomhus');
   const [selectedRoom, setSelectedRoom] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
@@ -28,7 +32,7 @@ export default function QRGeneratorPage() {
 
   const propertyOptions = properties.map(p => ({
     value: p.id,
-    label: `${p.name}${p.code ? ` (${p.code})` : ''}`
+    label: `${p.namn}${p.objektNr ? ` (${p.objektNr})` : ''}`
   }));
 
   const locationOptions = categories.map(c => ({
@@ -37,7 +41,7 @@ export default function QRGeneratorPage() {
   }));
 
   const roomOptions = selectedProperty
-    ? getRoomsForProperty(selectedProperty.id, selectedProperty.category)
+    ? getRoomsForProperty(selectedProperty.id, selectedProperty.kategori)
         .filter(r => r.type === selectedLocation)
         .map(r => ({ value: r.id, label: r.name }))
     : [];
@@ -54,7 +58,7 @@ export default function QRGeneratorPage() {
       const params = new URLSearchParams();
       params.append('objekt', selectedProperty.id);
       if (selectedRoom) {
-        const room = getRoomsForProperty(selectedProperty.id, selectedProperty.category).find(r => r.id === selectedRoom);
+        const room = getRoomsForProperty(selectedProperty.id, selectedProperty.kategori).find(r => r.id === selectedRoom);
         if (room) params.append('rum', room.id);
       }
 
@@ -88,7 +92,7 @@ export default function QRGeneratorPage() {
   const downloadQRCode = () => {
     if (qrCodeUrl) {
       const link = document.createElement('a');
-      const filename = `QR-${selectedProperty?.code || selectedProperty?.id}-${selectedRoom || 'alla'}.png`;
+      const filename = `QR-${selectedProperty?.objektNr || selectedProperty?.id}-${selectedRoom || 'alla'}.png`;
       link.download = filename;
       link.href = qrCodeUrl;
       link.click();
@@ -97,7 +101,7 @@ export default function QRGeneratorPage() {
 
   const getRoomName = () => {
     if (!selectedRoom || !selectedProperty) return '';
-    const room = getRoomsForProperty(selectedProperty.id, selectedProperty.category).find(r => r.id === selectedRoom);
+    const room = getRoomsForProperty(selectedProperty.id, selectedProperty.kategori).find(r => r.id === selectedRoom);
     return room?.name || '';
   };
 
@@ -106,7 +110,7 @@ export default function QRGeneratorPage() {
     return location?.name || '';
   };
 
-  const handleMapSelect = (property: Property) => {
+  const handleMapSelect = (property: Objekt) => {
     setSelectedPropertyId(property.id);
     setSelectedProperty(property);
     setSelectedRoom(''); // Reset room when property changes
@@ -178,7 +182,7 @@ export default function QRGeneratorPage() {
                   </div>
                   {selectedProperty && (
                     <p className="text-sm text-gray-600 mt-2">
-                      📍 {selectedProperty.address}
+                      📍 {selectedProperty.adress}
                     </p>
                   )}
                 </div>
@@ -243,15 +247,15 @@ export default function QRGeneratorPage() {
 
                     <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                       <p className="text-lg font-semibold text-gray-900 mb-1">
-                        {selectedProperty?.name}
+                        {selectedProperty?.namn}
                       </p>
-                      {selectedProperty?.code && (
+                      {selectedProperty?.objektNr && (
                         <p className="text-sm text-gray-600 mb-1">
-                          {selectedProperty.code}
+                          {selectedProperty.objektNr}
                         </p>
                       )}
                       <p className="text-sm text-gray-600 mb-2">
-                        {selectedProperty?.address}
+                        {selectedProperty?.adress}
                       </p>
                       {selectedRoom && (
                         <div className="mt-3 pt-3 border-t border-gray-200">
