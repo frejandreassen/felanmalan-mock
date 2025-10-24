@@ -1,0 +1,29 @@
+# Node modules
+node_modules
+
+# Next.js build
+.next
+out
+
+# Environment variables
+.env*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing
+coverage
+.turbo
+
+# Deployment
+.vercel
+
+# Development files
+todo.md
+.DS_Store
+
+# Only include source, not builds
+dist
+build

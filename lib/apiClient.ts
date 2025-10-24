@@ -1,6 +1,16 @@
-// API Client for arbetsorder API
+/**
+ * API Client for FAST2 API
+ *
+ * Uses BFF (Backend for Frontend) pattern:
+ * - All requests go through /api/bff/[...path]
+ * - BFF routes to mock or real API based on MOCK_API flag
+ * - BFF handles OAuth2 authentication when using real API
+ * - Client never sees OAuth2 tokens or secrets
+ *
+ * In Joomla, BFF would be a Joomla component controller doing the same routing.
+ */
 
-const API_BASE_URL = '/api/v1';
+const BFF_BASE_URL = '/api/bff';
 
 // Dynamic import to avoid server-side issues
 let apiLogger: typeof import('../components/ApiLog').apiLogger | null = null;
@@ -12,89 +22,44 @@ if (typeof window !== 'undefined') {
 }
 
 class ApiClient {
-  private token: string | null = null;
+  /**
+   * No authentication needed in client!
+   * BFF handles all auth (mock login or OAuth2)
+   */
 
-  // Authenticate and get token
-  async login(username: string = 'mock', password: string = 'mock'): Promise<string> {
-    const requestBody = { username, password };
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
-
-    apiLogger?.log({
-      method: 'POST',
-      endpoint: '/api/v1/auth/login',
-      status: response.status,
-      requestBody,
-      responseBody: data,
-    });
-
-    if (!response.ok) {
-      throw new Error('Authentication failed');
-    }
-
-    this.token = data.token;
-    return data.token;
-  }
-
-  // Get auth headers
+  /**
+   * Get headers for BFF requests
+   * No auth tokens needed - BFF handles that
+   */
   private getHeaders(): HeadersInit {
-    if (!this.token) {
-      throw new Error('Not authenticated. Call login() first.');
-    }
-
     return {
       'Content-Type': 'application/json',
-      'X-Auth-Token': this.token,
     };
   }
 
   // Create work order
   async createWorkOrder(workOrder: {
+    arbetsordertypKod: string;
+    kundNr: string;
+    objektId: string;
+    ursprung: number;
     externtId?: string;
-    objekt: {
-      id: string;
-      namn: string;
-      adress?: string;
-    };
-    utrymme?: {
-      id: string;
-      namn: string;
-    };
-    enhet?: {
-      id: string;
-      namn: string;
-    };
-    information: {
-      beskrivning: string;
+    externtNr?: string;
+    information?: {
+      beskrivning?: string;
       kommentar?: string;
     };
-    annanAnmalare?: {
-      namn: string;
+    anmalare?: {
+      namn?: string;
       telefon?: string;
       epostAdress?: string;
     };
-    arbetsorderTyp?: {
-      arbetsordertypKod: 'F' | 'U' | 'G';
-      arbetsordertypBesk: string;
-    };
-    prio?: {
-      prioKod: '10' | '30';
-      prioBesk: string;
-    };
-    tilltrade?: {
-      tilltradeKod: 'J' | 'N';
-      tilltradeBesk: string;
-    };
-    bilder?: string[];
+    utrymmesId?: number;
+    enhetsId?: number;
+    tilltradeKod?: string;
+    prioKod?: string;
   }) {
-    const response = await fetch(`${API_BASE_URL}/arbetsorder`, {
+    const response = await fetch(`${BFF_BASE_URL}/v1/arbetsorder`, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(workOrder),
@@ -104,7 +69,7 @@ class ApiClient {
 
     apiLogger?.log({
       method: 'POST',
-      endpoint: '/api/v1/arbetsorder',
+      endpoint: '/api/bff/v1/arbetsorder',
       status: response.status,
       requestBody: workOrder,
       responseBody: data,
@@ -119,7 +84,7 @@ class ApiClient {
 
   // Get work order by ID
   async getWorkOrder(id: string) {
-    const response = await fetch(`${API_BASE_URL}/arbetsorder/${id}`, {
+    const response = await fetch(`${BFF_BASE_URL}/v1/arbetsorder/${id}`, {
       method: 'GET',
       headers: this.getHeaders(),
     });
@@ -128,7 +93,7 @@ class ApiClient {
 
     apiLogger?.log({
       method: 'GET',
-      endpoint: `/api/v1/arbetsorder/${id}`,
+      endpoint: `/api/bff/v1/arbetsorder/${id}`,
       status: response.status,
       responseBody: data,
     });
@@ -152,15 +117,12 @@ class ApiClient {
     if (filter?.limit) params.append('limit', filter.limit.toString());
 
     const queryString = params.toString();
-    const endpoint = `/api/v1/arbetsorder${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/bff/v1/arbetsorder${queryString ? `?${queryString}` : ''}`;
 
-    const response = await fetch(
-      `${API_BASE_URL}/arbetsorder?${queryString}`,
-      {
-        method: 'GET',
-        headers: this.getHeaders(),
-      }
-    );
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
 
     const data = await response.json();
 
@@ -186,15 +148,12 @@ class ApiClient {
     if (filter?.kategori) params.append('kategori', filter.kategori);
 
     const queryString = params.toString();
-    const endpoint = `/api/v1/fastastrukturen/objekt${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/bff/v1/fastastrukturen/objekt${queryString ? `?${queryString}` : ''}`;
 
-    const response = await fetch(
-      `${API_BASE_URL}/fastastrukturen/objekt${queryString ? `?${queryString}` : ''}`,
-      {
-        method: 'GET',
-        headers: this.getHeaders(),
-      }
-    );
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
 
     const data = await response.json();
 
@@ -214,7 +173,7 @@ class ApiClient {
 
   // Get specific objekt by ID
   async getObjekt(id: string) {
-    const response = await fetch(`${API_BASE_URL}/fastastrukturen/objekt/${id}`, {
+    const response = await fetch(`${BFF_BASE_URL}/v1/fastastrukturen/objekt/${id}`, {
       method: 'GET',
       headers: this.getHeaders(),
     });
@@ -223,7 +182,7 @@ class ApiClient {
 
     apiLogger?.log({
       method: 'GET',
-      endpoint: `/api/v1/fastastrukturen/objekt/${id}`,
+      endpoint: `/api/bff/v1/fastastrukturen/objekt/${id}`,
       status: response.status,
       responseBody: data,
     });
@@ -242,15 +201,12 @@ class ApiClient {
     if (typ) params.append('typ', typ);
 
     const queryString = params.toString();
-    const endpoint = `/api/v1/fastastrukturen/utrymmen?${queryString}`;
+    const endpoint = `/api/bff/v1/fastastrukturen/utrymmen?${queryString}`;
 
-    const response = await fetch(
-      `${API_BASE_URL}/fastastrukturen/utrymmen?${queryString}`,
-      {
-        method: 'GET',
-        headers: this.getHeaders(),
-      }
-    );
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
 
     const data = await response.json();
 
@@ -274,15 +230,12 @@ class ApiClient {
     params.append('utrymmesId', utrymmesId);
 
     const queryString = params.toString();
-    const endpoint = `/api/v1/fastastrukturen/enheter?${queryString}`;
+    const endpoint = `/api/bff/v1/fastastrukturen/enheter?${queryString}`;
 
-    const response = await fetch(
-      `${API_BASE_URL}/fastastrukturen/enheter?${queryString}`,
-      {
-        method: 'GET',
-        headers: this.getHeaders(),
-      }
-    );
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
 
     const data = await response.json();
 

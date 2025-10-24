@@ -5,6 +5,7 @@ import Combobox from './Combobox';
 import MapDialog from './MapDialog';
 import { apiClient } from '@/lib/apiClient';
 import type { Objekt, Utrymme, Enhet } from '@/lib/fastaStrukturenStore';
+import { getAddressString } from '@/lib/fastaStrukturenStore';
 
 interface ReportFormProps {
   initialProperty?: string;
@@ -43,6 +44,7 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [workOrderNumber, setWorkOrderNumber] = useState('');
+  const [isConfidential, setIsConfidential] = useState(false);
 
   // Load objekt list on mount
   useEffect(() => {
@@ -165,10 +167,11 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
       // Create work order
       const workOrder = await apiClient.createWorkOrder({
         externtId: orderType === 'bestallning' ? refCode : undefined,
+        ursprung: isConfidential ? 99 : 1, // 1 = Web Portal, 99 = Confidential
         objekt: {
           id: selectedObjekt.id,
           namn: selectedObjekt.namn,
-          adress: selectedObjekt.adress
+          adress: getAddressString(selectedObjekt.adress)
         },
         utrymme: selectedUtrymme ? {
           id: selectedUtrymme.id,
@@ -229,6 +232,7 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     setContactPerson('Frej Andreassen');
     setEmail('frej.andreassen@falkenberg.se');
     setImage(null);
+    setIsConfidential(false);
   };
 
   const handleMapSelect = (property: Objekt) => {
@@ -341,7 +345,7 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
             </div>
             {selectedObjekt && (
               <p className="text-sm text-gray-600 mt-2">
-                📍 {selectedObjekt.adress}
+                📍 {getAddressString(selectedObjekt.adress)}
               </p>
             )}
           </div>
@@ -490,6 +494,26 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
                 ✓ Bild vald: {image.name}
               </p>
             )}
+          </div>
+
+          {/* Confidential Checkbox */}
+          <div className="border border-gray-200 rounded-md p-4 bg-gray-50">
+            <label className="flex items-start cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={isConfidential}
+                onChange={(e) => setIsConfidential(e.target.checked)}
+                className="mt-1 w-4 h-4 text-orange-500 focus:ring-orange-400 focus:ring-2 rounded"
+              />
+              <div className="ml-3 flex-1">
+                <span className="text-sm font-medium text-gray-700">
+                  Sekretessmarkera arbetsorder
+                </span>
+                <p className="text-xs text-gray-500 mt-1" title="Sekretessmarkerade arbetsorder visas inte i publika listor eller rapporter. Använd detta för känsliga ärenden som kräver extra sekretesskydd.">
+                  ℹ️ Sekretessmarkerade arbetsorder filtreras bort från visningar och rapporter. Använd för känsliga ärenden.
+                </p>
+              </div>
+            </label>
           </div>
 
           <div className="flex gap-4">

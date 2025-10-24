@@ -2,20 +2,33 @@
 // Represents the hierarchical structure: Företag → Fastighet → Byggnad → Objekt → Utrymme → Enhet
 
 import propertiesData from './properties.json';
+import { swedishToWGS84, wgs84ToSwedish } from './coordinateTransform';
 
-// Type definitions matching FAST2 API structure
+// Type definitions matching FAST2 API structure (ObjektGetUt)
+export interface ObjektAdress {
+  lghnummer?: string;
+  adress: string;
+  postnummer?: string;
+  postort?: string;
+  xkoord?: string; // Swedish coordinate system (SWEREF99 or RT90)
+  ykoord?: string; // Swedish coordinate system (SWEREF99 or RT90)
+}
+
 export interface Objekt {
   id: string;
   objektNr: string;
   namn: string;
-  adress: string;
-  lat: number;
-  lng: number;
+  adress: string | ObjektAdress; // Support both legacy string and new object format
+  lat: number;  // WGS84 latitude (transformed from xkoord/ykoord)
+  lng: number;  // WGS84 longitude (transformed from xkoord/ykoord)
   kategori?: string;
   fastighet?: {
     fastighetId: string;
     fastighetNamn: string;
   };
+  // Additional fields from API that we might need
+  xkoord?: string; // Original Swedish X coordinate
+  ykoord?: string; // Original Swedish Y coordinate
 }
 
 export interface Utrymme {
@@ -50,18 +63,39 @@ export const objekt: Objekt[] = propertiesData.map(prop => {
   else if (code.startsWith('12')) kategori = 'inhyrd';
   else if (code.startsWith('109')) kategori = 'paviljong';
 
+  // Convert WGS84 to Swedish coordinates (SWEREF99) for mock API
+  const swedishCoords = wgs84ToSwedish(prop.lat, prop.lng, 'SWEREF99');
+  const xkoord = swedishCoords ? Math.round(swedishCoords.x).toString() : '';
+  const ykoord = swedishCoords ? Math.round(swedishCoords.y).toString() : '';
+
+  // Extract postal code and city from address
+  const addressParts = prop.address.split(',');
+  const postalParts = addressParts[addressParts.length - 2]?.trim().match(/(\d{3}\s*\d{2})\s+(.+)/);
+  const postnummer = postalParts?.[1]?.replace(/\s/g, ' ') || '';
+  const postort = postalParts?.[2] || addressParts[addressParts.length - 1]?.trim() || 'Falkenberg';
+  const gata = addressParts[0]?.trim() || prop.address;
+
   return {
     id: prop.id,
     objektNr: prop.code || prop.id,
     namn: prop.name,
-    adress: prop.address,
+    adress: {
+      lghnummer: prop.code || '',
+      adress: gata,
+      postnummer,
+      postort,
+      xkoord,
+      ykoord
+    },
     lat: prop.lat,
     lng: prop.lng,
     kategori,
     fastighet: {
       fastighetId: `F-${code.substring(0, 3)}`,
       fastighetNamn: `Fastighet ${code.substring(0, 3)}`
-    }
+    },
+    xkoord,
+    ykoord
   };
 });
 
@@ -299,6 +333,57 @@ const generateEnheterForUtrymme = (utrymme: Utrymme): Enhet[] => {
 export const enheter: Enhet[] = utrymmen.flatMap(utrymme =>
   generateEnheterForUtrymme(utrymme)
 );
+
+// Helper function to get address string from Objekt
+export function getAddressString(adress: string | ObjektAdress): string {
+  if (typeof adress === 'string') {
+    return adress;
+  }
+  return adress.adress;
+}
+
+// Helper function to transform API ObjektGetUt to our Objekt format
+export function transformApiObjekt(apiObjekt: {
+  id: string;
+  adress?: ObjektAdress;
+  [key: string]: unknown;
+}): Objekt | null {
+  // Extract coordinates from address
+  const xkoord = apiObjekt.adress?.xkoord;
+  const ykoord = apiObjekt.adress?.ykoord;
+
+  // Transform Swedish coordinates to WGS84
+  let lat = 0;
+  let lng = 0;
+
+  if (xkoord && ykoord) {
+    const wgs84 = swedishToWGS84(xkoord, ykoord);
+    if (wgs84) {
+      lat = wgs84.lat;
+      lng = wgs84.lng;
+    } else {
+      console.warn(`Failed to transform coordinates for objekt ${apiObjekt.id}`);
+      return null;
+    }
+  } else {
+    console.warn(`Missing coordinates for objekt ${apiObjekt.id}`);
+    return null;
+  }
+
+  // Extract other fields (would need to match actual API structure)
+  return {
+    id: apiObjekt.id,
+    objektNr: (apiObjekt as { objektNr?: string }).objektNr || apiObjekt.id,
+    namn: (apiObjekt as { namn?: string }).namn || 'Unknown',
+    adress: apiObjekt.adress?.adress || '',
+    lat,
+    lng,
+    kategori: (apiObjekt as { kategori?: string }).kategori,
+    fastighet: (apiObjekt as { fastighet?: { fastighetId: string; fastighetNamn: string } }).fastighet,
+    xkoord,
+    ykoord
+  };
+}
 
 // Export helper functions for the API
 export const fastaStrukturenStore = {

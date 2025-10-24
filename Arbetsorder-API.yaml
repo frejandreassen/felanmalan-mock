@@ -1,0 +1,5841 @@
+openapi: 3.0.1
+info:
+  title: ArbetsorderProdukt
+  version: 1.0.0
+servers:
+  - url: /
+security:
+  - default: []
+paths:
+  /v1/filetransfer/tempfile:
+    post:
+      tags:
+        - filetransfer
+      operationId: storeTempFile
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/filetransfer/file/{id}':
+    get:
+      tags:
+        - filetransfer
+      operationId: getFile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Found the file
+          content:
+            application/octet-stream: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    delete:
+      tags:
+        - filetransfer
+      operationId: deleteFile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/filetransfer/tempfile/{name}':
+    delete:
+      tags:
+        - filetransfer
+      operationId: deleteTempFile
+      parameters:
+        - name: name
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/fastastrukturen/enheter/{id}':
+    get:
+      tags:
+        - fastastrukturen
+      operationId: getEnhet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnhetGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    put:
+      tags:
+        - fastastrukturen
+      operationId: putEnhet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnhetIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/fastastrukturen/objekt/felanmalningsbara/uthyrningsbara:
+    post:
+      tags:
+        - fastastrukturen
+      operationId: getFelanmalningsbaraHyresobjekt
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FelanmalningsbaraHyresobjektSokning'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjektGetUtConnection'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/fastastrukturen/objekt/felanmalningsbara/ejuthyrningsbara:
+    post:
+      tags:
+        - fastastrukturen
+      operationId: getFelanmalningsbaraEjHyresobjekt
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FelanmalningsbaraEjHyresobjektSokning'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjektGetUtConnection'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/fastastrukturen/utrymmen:
+    get:
+      tags:
+        - fastastrukturen
+      operationId: getUtrymmenGivetObjekt
+      parameters:
+        - name: objektId
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UtrymmeGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/fastastrukturen/utrymmen/{id}':
+    get:
+      tags:
+        - fastastrukturen
+      operationId: getUtrymme
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UtrymmeGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/fastastrukturen/objekt:
+    get:
+      tags:
+        - fastastrukturen
+      operationId: getObjekt
+      parameters:
+        - name: id
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjektGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/fastastrukturen/objekt/{id}':
+    get:
+      tags:
+        - fastastrukturen
+      operationId: getObjekt_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjektGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/fastastrukturen/fraser:
+    get:
+      tags:
+        - fastastrukturen
+      operationId: getFraserGivetEnhet
+      parameters:
+        - name: enhetsId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FrasGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/fastastrukturen/enheter:
+    get:
+      tags:
+        - fastastrukturen
+      operationId: getEnheterGivetUtrymme
+      parameters:
+        - name: utrymmesId
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: enhetsId
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EnhetGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/system/resurskalender:
+    post:
+      tags:
+        - system
+      operationId: getResursKalender
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResursKalenderIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResursKalenderUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getArbetsorder_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbetsorderUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    put:
+      tags:
+        - arbetsorder
+      operationId: putArbetsorder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbetsorderPutIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/status':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getArbetsorderStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbetsorderStatusGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    put:
+      tags:
+        - arbetsorder
+      operationId: postArbetsorderStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbetsorderStatusIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/tider/{id}':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getTid
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PersontidGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    put:
+      tags:
+        - arbetsorder
+      operationId: putTid
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersontidIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    delete:
+      tags:
+        - arbetsorder
+      operationId: deleteTid
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/tider/{id}/stoppa':
+    put:
+      tags:
+        - arbetsorder
+      operationId: stoppaTid
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/meddelanden/{id}/lasta':
+    put:
+      tags:
+        - arbetsorder
+      operationId: markeraMeddelandenSomLast
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/kontaktpersoner/{id}':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getKontaktperson
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KontaktpersonGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    put:
+      tags:
+        - arbetsorder
+      operationId: putKontaktperson
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KontaktpersonIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    delete:
+      tags:
+        - arbetsorder
+      operationId: deleteKontaktperson
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/handelser/{id}':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getHandelse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandelseGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    put:
+      tags:
+        - arbetsorder
+      operationId: putHandelse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandelsePutIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    delete:
+      tags:
+        - arbetsorder
+      operationId: deleteHandelse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getArbetsordrar_1
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            maximum: 1000
+            minimum: 1
+            type: integer
+            format: int32
+            default: 100
+        - name: objektId
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: kundNr
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: utforare
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: feltyp
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: skapadEfter
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date
+        - name: modifieradEfter
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date-time
+        - name: bokadDatum
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            format: date
+        - name: bokningStatus
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - BOKAD
+                - EJ_BOKAD
+                - ACCEPTERAD
+        - name: enhetsId
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArbetsorderUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    post:
+      tags:
+        - arbetsorder
+      operationId: postArbetsorder
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbetsorderPostIn'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbetsorderPostUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/sla/avslutad':
+    post:
+      tags:
+        - arbetsorder
+      operationId: postSlaAvslut
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/filer':
+    post:
+      tags:
+        - arbetsorder
+      operationId: createFiles_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbetsorderFilerIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/boka':
+    post:
+      tags:
+        - arbetsorder
+      operationId: bokaArbetsorder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbetsorderBokningIn'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/avboka':
+    post:
+      tags:
+        - arbetsorder
+      operationId: avbokaArbetsorder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbetsorderAvbokningIn'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/tider:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getTider
+      parameters:
+        - name: arbetsorderId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersontidGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    post:
+      tags:
+        - arbetsorder
+      operationId: postTid
+      parameters:
+        - name: arbetsorderId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersontidIn'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersontidPostUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/tider/starta:
+    post:
+      tags:
+        - arbetsorder
+      operationId: startaTid
+      parameters:
+        - name: arbetsorderId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersontidIn'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersontidPostUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/meddelande:
+    post:
+      tags:
+        - arbetsorder
+      operationId: svaraMeddelande
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeddelandeIn'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/kontaktpersoner:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getKontaktpersoner
+      parameters:
+        - name: arbetsorderId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KontaktpersonGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    post:
+      tags:
+        - arbetsorder
+      operationId: postKontaktperson
+      parameters:
+        - name: arbetsorderId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KontaktpersonIn'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KontaktpersonPostUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/handelser:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getHandelser
+      parameters:
+        - name: arbetsorderId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HandelseGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+    post:
+      tags:
+        - arbetsorder
+      operationId: postHandelse
+      parameters:
+        - name: arbetsorderId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandelsePostIn'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandelsePostUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/status/vardelista':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getArbetsorderStatusLista
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArbetsorderStatusGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/sla':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getSla
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SlaGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/{id}/bokning':
+    get:
+      tags:
+        - arbetsorder
+      operationId: bokning
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbetsorderBokningUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/tilltrade/vardelista:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getTilltradeVardelista
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TilltradeUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/tider/aktiviteter/vardelista:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getTidsfraser
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TidsfrasGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/resurs/forslag:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getResursForslag
+      parameters:
+        - name: feltyp
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: objektId
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: enhetId
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResursUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/arbetsorder/meddelanden/{id}':
+    get:
+      tags:
+        - arbetsorder
+      operationId: getMeddelanden
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MeddelandeGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/kontaktpersoner/kontakter/vardelista:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getKontaktpersonerVardelista
+      parameters:
+        - name: foretagsnr
+          in: query
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KontaktpersonGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/arbetsorder/handelser/vardelista:
+    get:
+      tags:
+        - arbetsorder
+      operationId: getHandelseTyper
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HandelseTypGetUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/avtal:
+    get:
+      tags:
+        - se/fast2/doman/avtal
+      operationId: dummy
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/auth/refresh:
+    post:
+      tags:
+        - auth
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/auth/loginsso:
+    post:
+      tags:
+        - auth
+      operationId: loginSso
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginSsoIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/auth/login:
+    post:
+      tags:
+        - auth
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  /v1/auth/federatedlogin:
+    post:
+      tags:
+        - auth
+      operationId: federatedlogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FederatedLoginIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/kund/{id}/kontaktuppgift':
+    put:
+      tags:
+        - kund
+      operationId: putKontaktuppgift
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KommunikationIn'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/kund/{id}':
+    get:
+      tags:
+        - kund
+      operationId: getKund
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KundUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+  '/v1/kund/kundnummer/{nummer}':
+    get:
+      tags:
+        - kund
+      operationId: getKundByKundnr
+      parameters:
+        - name: nummer
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: X-Auth-Token
+          in: header
+          description: >-
+            Access-token authenticating and authorizing end-user, token received
+            from auth-api.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KundUt'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      security:
+        - default: []
+      x-throttling-tier: Unlimited
+      x-auth-type: Application & Application User
+components:
+  schemas:
+    ErrorMessage:
+      required:
+        - id
+        - message
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        message:
+          type: string
+        userMessage:
+          type: string
+    ResursKalenderPeriodIn:
+      type: object
+      properties:
+        vecka:
+          $ref: '#/components/schemas/ResursKalenderVeckaIn'
+        intervall:
+          $ref: '#/components/schemas/ResursKalenderIntervallIn'
+    ResursKalenderIn:
+      required:
+        - aktivitetsTyp
+        - objektId
+        - period
+        - resursId
+      type: object
+      properties:
+        objektId:
+          type: string
+        resursId:
+          type: string
+        period:
+          $ref: '#/components/schemas/ResursKalenderPeriodIn'
+        aktivitetsTyp:
+          type: string
+          enum:
+            - ARBETSORDER
+            - BESIKTNING
+            - ARENDE
+        visaEndastBokningsbara:
+          type: boolean
+        inkluderaOverbokningsbara:
+          type: boolean
+    ResursKalenderIntervallIn:
+      type: object
+      properties:
+        datumFran:
+          type: string
+          format: date
+        datumTill:
+          type: string
+          format: date
+    ResursKalenderVeckaIn:
+      type: object
+      properties:
+        ar:
+          type: integer
+          format: int32
+        vecka:
+          type: integer
+          format: int32
+    ResursNyckelIn:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+        kod:
+          type: string
+    ResursKalenderUt:
+      type: object
+      properties:
+        id:
+          type: string
+        beskrivning:
+          type: string
+        starttid:
+          type: string
+          format: date-time
+        sluttid:
+          type: string
+          format: date-time
+        aktivitetsTyp:
+          type: string
+          enum:
+            - ARBETSORDER
+            - BESIKTNING
+            - ARENDE
+        kalenderId:
+          type: integer
+          format: int64
+        kapacitet:
+          type: integer
+          format: int32
+        maxKapacitet:
+          type: integer
+          format: int32
+        geografi:
+          type: string
+        antalAktiviteter:
+          type: integer
+          format: int32
+        maxAntalAktiviteter:
+          type: integer
+          format: int32
+        bokningsbar:
+          type: boolean
+        rekommenderad:
+          type: boolean
+        primartTilltrade:
+          $ref: '#/components/schemas/Tilltrade'
+        valbartTilltrade:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tilltrade'
+    EnhetGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        utrymme:
+          $ref: '#/components/schemas/EnhetUtrymme'
+        enhetstyp:
+          $ref: '#/components/schemas/EnhetEnhetstyp'
+        beskrivning:
+          type: string
+        underhall:
+          type: boolean
+        felanmalan:
+          type: boolean
+        underhallsdatum:
+          type: string
+        installationsdatum:
+          type: string
+        serienummer:
+          type: string
+        garanti:
+          type: integer
+          format: int32
+        underhallAtgard:
+          type: string
+        egenskap:
+          type: string
+        mangd:
+          type: integer
+          format: int64
+        notering:
+          type: string
+    UtrymmeGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        beskrivning:
+          type: string
+        rumsnummer:
+          type: string
+        utrymmesTypKod:
+          type: string
+    FelanmalningsbaraHyresObjektFilter:
+      type: object
+      properties:
+        kundId:
+          type: integer
+          format: int64
+        objektId:
+          type: string
+    Fras:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        text:
+          type: string
+    ObjektKunder:
+      type: object
+      properties:
+        id1:
+          type: integer
+          format: int64
+        id2:
+          type: integer
+          format: int64
+    ObjektGetUt:
+      type: object
+      properties:
+        id:
+          type: string
+        adress:
+          $ref: '#/components/schemas/ObjektAdress'
+        detalj:
+          $ref: '#/components/schemas/ObjektDetalj'
+        typ:
+          $ref: '#/components/schemas/ObjektTyp'
+        kunder:
+          $ref: '#/components/schemas/ObjektKunder'
+        relationer:
+          $ref: '#/components/schemas/ObjektRelationer'
+    FelanmalningsbaraHyresobjektSortering:
+      type: object
+      properties:
+        falt:
+          type: string
+          enum:
+            - HUVUDOBJEKT
+            - OBJEKTTYP_BESKRIVNING
+            - OBJEKTNUMMER
+        riktning:
+          type: string
+          enum:
+            - ASC
+            - DESC
+    ObjektAdress:
+      type: object
+      properties:
+        lghnummer:
+          type: string
+        adress:
+          type: string
+        postnummer:
+          type: string
+        postort:
+          type: string
+        xkoord:
+          type: string
+        ykoord:
+          type: string
+    ObjektRelationer:
+      type: object
+      properties:
+        foretagNr:
+          type: string
+        fastighetNr:
+          type: string
+        byggnadNr:
+          type: string
+        sokomrade1Nr:
+          type: string
+        sokomrade2Nr:
+          type: string
+        sokomrade3Nr:
+          type: string
+        adminomradeNr:
+          type: string
+        felomradeNr:
+          type: string
+        underhallomradeNr:
+          type: string
+        ingarI:
+          type: string
+    FelanmalningsbaraEjHyresobjektFilter:
+      required:
+        - objektId
+      type: object
+      properties:
+        objektId:
+          type: string
+        onlyReportableExternal:
+          type: boolean
+    ObjektVaning:
+      type: object
+      properties:
+        id:
+          type: string
+        beskrivning:
+          type: string
+        kortnamn:
+          type: string
+        nummer:
+          type: integer
+          format: int32
+    EnhetEnhetstyp:
+      type: object
+      properties:
+        kod:
+          type: string
+        id:
+          type: integer
+          format: int64
+    FrasGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        typ:
+          $ref: '#/components/schemas/Frastyp'
+        fras:
+          $ref: '#/components/schemas/Fras'
+    Frastyp:
+      type: object
+      properties:
+        beskrivning:
+          type: string
+    ObjektTyp:
+      type: object
+      properties:
+        objektsOTyp:
+          type: string
+        objektsTyp:
+          type: string
+        beskrivning:
+          type: string
+    ObjektGetUtConnection:
+      type: object
+      properties:
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjektGetUtEdge'
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+    EnhetUtrymme:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    ObjektGetUtEdge:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/ObjektGetUt'
+        cursor:
+          type: string
+    EnhetIn:
+      type: object
+      properties:
+        beskrivning:
+          type: string
+        underhallsdatum:
+          type: string
+        installationsdatum:
+          type: string
+        serienummer:
+          type: string
+        egenskap:
+          type: string
+        notering:
+          type: string
+    FelanmalningsbaraEjHyresobjektSokning:
+      required:
+        - filter
+      type: object
+      properties:
+        first:
+          type: integer
+          format: int32
+        after:
+          type: string
+        filter:
+          $ref: '#/components/schemas/FelanmalningsbaraEjHyresobjektFilter'
+    ObjektDetalj:
+      type: object
+      properties:
+        vaning:
+          $ref: '#/components/schemas/ObjektVaning'
+        hiss:
+          type: boolean
+        yta:
+          type: number
+        anmarkning:
+          type: string
+        text:
+          type: string
+        hyressparr:
+          type: string
+        hyressparrAnmarkning:
+          type: string
+        besiktigadDatum:
+          type: string
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+        endCursor:
+          type: string
+    FelanmalningsbaraHyresobjektSokning:
+      required:
+        - filter
+      type: object
+      properties:
+        first:
+          type: integer
+          format: int32
+        after:
+          type: string
+        filter:
+          $ref: '#/components/schemas/FelanmalningsbaraHyresObjektFilter'
+        sortering:
+          type: array
+          items:
+            $ref: '#/components/schemas/FelanmalningsbaraHyresobjektSortering'
+    ArbetsorderBokningUt:
+      type: object
+      properties:
+        bokning:
+          $ref: '#/components/schemas/BokningUt'
+    HandelsePostIn:
+      type: object
+      properties:
+        rubrik:
+          type: string
+        text:
+          type: string
+        typKod:
+          type: string
+    ArbetsorderPostUt:
+      type: object
+      properties:
+        arbetsorderId:
+          type: integer
+          format: int64
+    FaktureraUt:
+      type: object
+      properties:
+        faktureras:
+          type: boolean
+        fakturerasBelopp:
+          type: integer
+    MeddelandeIn:
+      type: object
+      properties:
+        kundnummer:
+          type: string
+        arbetsorderId:
+          type: integer
+          format: int64
+        meddelande:
+          type: string
+        amne:
+          type: string
+    EkonomiUt:
+      type: object
+      properties:
+        konteringKonto:
+          type: string
+        konteringRefKst:
+          type: string
+        konteringFastighetsnr:
+          type: string
+        konteringUhFel:
+          type: string
+        konteringMaterialKonto:
+          type: string
+        konteringProjekt:
+          type: string
+        konteringDriftProjekt:
+          type: string
+        materialKostnad:
+          type: integer
+          format: int64
+        kostnad:
+          type: integer
+          format: int64
+    ArbetsorderPutIn:
+      required:
+        - arbetsordertypKod
+        - kundNr
+        - objektId
+      type: object
+      properties:
+        externtId:
+          type: string
+        externtNr:
+          type: string
+        buntId:
+          type: string
+        resursId:
+          type: string
+        statusKod:
+          type: string
+        utrymmesId:
+          type: integer
+          format: int64
+        enhetsId:
+          type: integer
+          format: int64
+        enhetsNotering:
+          type: string
+        nyEnhet:
+          $ref: '#/components/schemas/NyEnhetIn'
+        frasNr:
+          type: integer
+          format: int64
+        information:
+          $ref: '#/components/schemas/InformationIn'
+        arbetsordertypKod:
+          type: string
+        tilltradeKod:
+          type: string
+        prioKod:
+          type: string
+        objektId:
+          type: string
+        anmalare:
+          $ref: '#/components/schemas/AnnanAnmalareIn'
+        kundNr:
+          type: string
+        planering:
+          $ref: '#/components/schemas/PlaneringIn'
+        ekonomi:
+          $ref: '#/components/schemas/EkonomiIn'
+        fakturera:
+          $ref: '#/components/schemas/FaktureraIn'
+        kundPrimarKontaktsatt:
+          type: string
+          enum:
+            - TELBOS
+            - TELARB
+            - TELOVR
+            - EPOST
+    HandelseTypGetUt:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+    TelefonUt:
+      type: object
+      properties:
+        typ:
+          type: string
+          enum:
+            - BOSTAD
+            - ARBETE
+            - AVFLYTTAD
+            - MOBIL
+        telefonNr:
+          type: string
+    ArbetsorderFilIn:
+      required:
+        - filnamn
+      type: object
+      properties:
+        filnamn:
+          type: string
+        beskrivning:
+          type: string
+        typ:
+          type: string
+    ArbetsorderStatusIn:
+      required:
+        - statuskod
+      type: object
+      properties:
+        statuskod:
+          type: string
+    ArbetsorderUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        externtId:
+          type: string
+        externtNr:
+          type: string
+        objekt:
+          $ref: '#/components/schemas/ArbetsorderObjektUt'
+        kund:
+          $ref: '#/components/schemas/ArbetsorderKundUt'
+        bunt:
+          $ref: '#/components/schemas/BuntUt'
+        utforare:
+          $ref: '#/components/schemas/ResursUt'
+        status:
+          $ref: '#/components/schemas/ArbetsorderStatusUt'
+        utrymme:
+          $ref: '#/components/schemas/ArbetsorderUtrymmeUt'
+        enhet:
+          $ref: '#/components/schemas/ArbetsorderEnhetUt'
+        nyEnhet:
+          $ref: '#/components/schemas/NyEnhetUt'
+        fras:
+          $ref: '#/components/schemas/FrasUt'
+        information:
+          $ref: '#/components/schemas/InformationUt'
+        arbetsorderTyp:
+          $ref: '#/components/schemas/ArbetsorderTypUt'
+        tilltrade:
+          $ref: '#/components/schemas/TilltradeUt'
+        prio:
+          $ref: '#/components/schemas/PrioUt'
+        registrerad:
+          $ref: '#/components/schemas/RegistreradUt'
+        bestalld:
+          $ref: '#/components/schemas/BestalldUt'
+        accepterad:
+          $ref: '#/components/schemas/AccepteradUt'
+        utford:
+          $ref: '#/components/schemas/UtfordUt'
+        modifierad:
+          $ref: '#/components/schemas/ModifieradUt'
+        referens:
+          $ref: '#/components/schemas/ResursUt'
+        pamin1:
+          type: string
+        pamin2:
+          type: string
+        planering:
+          $ref: '#/components/schemas/PlaneringUt'
+        ekonomi:
+          $ref: '#/components/schemas/EkonomiUt'
+        fakturera:
+          $ref: '#/components/schemas/FaktureraUt'
+        ursprung:
+          type: integer
+          format: int32
+        annanAnmalare:
+          $ref: '#/components/schemas/AnnanAnmalareUt'
+        filUtList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilUt'
+        nyckelinformation:
+          $ref: '#/components/schemas/Nyckelinformation'
+        kundPrimarKontaktsatt:
+          type: string
+          enum:
+            - TELBOS
+            - TELARB
+            - TELOVR
+            - EPOST
+    Nyckelinformation:
+      type: object
+      properties:
+        adress:
+          type: string
+        kod:
+          type: string
+    UtfordUt:
+      type: object
+      properties:
+        datumUtford:
+          type: string
+        utfordAv:
+          $ref: '#/components/schemas/ResursUt'
+    PlaneringUt:
+      type: object
+      properties:
+        bokadDatum:
+          type: string
+        bokadFomTid:
+          type: string
+        bokadTomTid:
+          type: string
+        bokadMedModul:
+          type: boolean
+    KontaktpersonGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        arbetsorderId:
+          type: integer
+          format: int64
+        datumFom:
+          type: string
+        datumTom:
+          type: string
+        namn:
+          type: string
+        epost:
+          type: string
+        telefonMobil:
+          type: string
+        telefonOvrig:
+          type: string
+        anmarkning:
+          type: string
+    KontaktpersonPostUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    NyEnhetUt:
+      type: object
+      properties:
+        enhetsTyp:
+          type: string
+    AnnanAnmalareIn:
+      type: object
+      properties:
+        namn:
+          type: string
+        telefon:
+          type: string
+        epostAdress:
+          type: string
+    KontaktpersonIn:
+      type: object
+      properties:
+        arbetsorderId:
+          type: integer
+          format: int64
+        datumFom:
+          type: string
+        datumTom:
+          type: string
+        namn:
+          type: string
+        epost:
+          type: string
+        telefonMobil:
+          type: string
+        telefonOvrig:
+          type: string
+        anmarkning:
+          type: string
+    ArbetsorderObjektUt:
+      type: object
+      properties:
+        id:
+          type: string
+    FilUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        beskrivning:
+          type: string
+        filnamn:
+          type: string
+        datum:
+          type: string
+          format: date-time
+    InformationIn:
+      type: object
+      properties:
+        beskrivning:
+          type: string
+        kommentar:
+          type: string
+        anmarkning:
+          type: string
+        atgard:
+          type: string
+    PrioUt:
+      type: object
+      properties:
+        prioKod:
+          type: string
+        prioBesk:
+          type: string
+        prioSla:
+          type: integer
+          format: int64
+    ArbetsorderUtrymmeUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    PersontidIn:
+      required:
+        - aktivitet
+        - arbetsorderId
+        - datumFom
+        - datumTom
+        - resursId
+      type: object
+      properties:
+        arbetsorderId:
+          type: integer
+          format: int64
+        resursId:
+          type: string
+        timmar:
+          type: number
+        minuter:
+          type: integer
+          format: int32
+        starttid:
+          type: string
+        sluttid:
+          type: string
+        datumFom:
+          type: string
+        datumTom:
+          type: string
+        aktivitet:
+          type: string
+        frasId:
+          type: integer
+          format: int64
+        pris:
+          type: integer
+          format: int64
+    MeddelandeGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        till:
+          type: string
+        fran:
+          type: string
+        label:
+          type: string
+        text1:
+          type: string
+        skapadDatum:
+          type: string
+        skapadTid:
+          type: string
+        namnTill:
+          type: string
+        namnFran:
+          type: string
+    ArbetsorderStatusGetUt:
+      type: object
+      properties:
+        statuskod:
+          type: string
+        beskrivning:
+          type: string
+    TidsfrasGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        frasText:
+          type: string
+    ArbetsorderBokningIn:
+      required:
+        - tidsluckaId
+      type: object
+      properties:
+        tidsluckaId:
+          type: string
+        overbokning:
+          type: boolean
+        tilltrade:
+          $ref: '#/components/schemas/BokningTilltradeIn'
+    HandelsePostUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    FaktureraIn:
+      type: object
+      properties:
+        faktureras:
+          type: boolean
+        fakturerasBelopp:
+          type: integer
+          format: int64
+    RegistreradUt:
+      type: object
+      properties:
+        datumRegistrerad:
+          type: string
+        registreradAv:
+          $ref: '#/components/schemas/ResursUt'
+    BokningUt:
+      type: object
+      properties:
+        tidsluckaId:
+          type: string
+        startTid:
+          type: string
+          format: date-time
+        slutTid:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - RESERVERAD_EJ_SIGNERAD
+            - REGISTRERAD_EJ_GODKAND
+            - GODKAND
+            - BEKRAFTAD
+            - DEBITERAD
+            - BETALD
+            - BOKNING_TIDSLUCKA
+            - BOKAD
+            - BOKNING_ACCEPTERAD
+            - BOKNING_FRANVARO
+            - BOKNING_BLOCKERING
+            - AVBOKAD
+        antalAktiviteter:
+          type: integer
+          format: int32
+        tilltrade:
+          $ref: '#/components/schemas/BokningTilltrade'
+    EkonomiIn:
+      type: object
+      properties:
+        konteringKonto:
+          type: string
+        konteringRefKst:
+          type: string
+        konteringFastighetnr:
+          type: string
+        konteringUhFel:
+          type: string
+        konteringMaterialKonto:
+          type: string
+        konteringProjekt:
+          type: string
+        konteringDriftproj:
+          type: string
+        materialKostnad:
+          type: integer
+          format: int64
+        kostnad:
+          type: integer
+          format: int64
+    HandelsePutIn:
+      type: object
+      properties:
+        rubrik:
+          type: string
+        text:
+          type: string
+        typKod:
+          type: string
+        aktivFrom:
+          type: string
+        aktivTom:
+          type: string
+    ArbetsorderPostIn:
+      required:
+        - arbetsordertypKod
+        - kundNr
+        - objektId
+        - ursprung
+      type: object
+      properties:
+        externtId:
+          type: string
+        externtNr:
+          type: string
+        buntId:
+          type: string
+        resursId:
+          type: string
+        statusKod:
+          type: string
+        utrymmesId:
+          type: integer
+          format: int64
+        enhetsId:
+          type: integer
+          format: int64
+        enhetsNotering:
+          type: string
+        nyEnhet:
+          $ref: '#/components/schemas/NyEnhetIn'
+        frasNr:
+          type: integer
+          format: int64
+        information:
+          $ref: '#/components/schemas/InformationIn'
+        arbetsordertypKod:
+          type: string
+        tilltradeKod:
+          type: string
+        prioKod:
+          type: string
+        objektId:
+          type: string
+        anmalare:
+          $ref: '#/components/schemas/AnnanAnmalareIn'
+        kundNr:
+          type: string
+        planering:
+          $ref: '#/components/schemas/PlaneringIn'
+        ekonomi:
+          $ref: '#/components/schemas/EkonomiIn'
+        fakturera:
+          $ref: '#/components/schemas/FaktureraIn'
+        ursprung:
+          type: integer
+          format: int64
+        kundPrimarKontaktsatt:
+          type: string
+          enum:
+            - TELBOS
+            - TELARB
+            - TELOVR
+            - EPOST
+        bokning:
+          $ref: '#/components/schemas/ArbetsorderBokningIn'
+    SlaGetUt:
+      type: object
+      properties:
+        slaStart:
+          type: string
+          format: date-time
+        slaAvtalatSlut:
+          type: string
+          format: date-time
+        slaFaktisktSlut:
+          type: string
+          format: date-time
+        slaDiff:
+          type: integer
+          format: int64
+    ArbetsorderStatusUt:
+      type: object
+      properties:
+        statusKod:
+          type: string
+    ResursKommunikationUt:
+      type: object
+      properties:
+        epostAdress:
+          type: string
+        telefon:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelefonUt'
+    FrasUt:
+      type: object
+      properties:
+        frasKod:
+          type: integer
+          format: int64
+        frasBesk:
+          type: string
+    BuntUt:
+      type: object
+      properties:
+        buntId:
+          type: string
+        buntText:
+          type: string
+    ArbetsorderEnhetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        enhetsNotering:
+          type: string
+    TilltradeUt:
+      type: object
+      properties:
+        tilltradeKod:
+          type: string
+        tilltradeBesk:
+          type: string
+    PlaneringIn:
+      type: object
+      properties:
+        bokadDatum:
+          type: string
+        bokadFomTid:
+          type: string
+        bokadTomTid:
+          type: string
+    ArbetsorderKundUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    AnnanAnmalareUt:
+      type: object
+      properties:
+        namn:
+          type: string
+        telefon:
+          type: string
+        epostAdress:
+          type: string
+    ModifieradUt:
+      type: object
+      properties:
+        datumModifierad:
+          type: string
+          format: date-time
+        modifieradAv:
+          $ref: '#/components/schemas/ResursUt'
+    HandelseGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        rubrik:
+          type: string
+        text:
+          type: string
+        typKod:
+          type: string
+        typBeskrivning:
+          type: string
+        sortKod:
+          type: string
+        sortBeskrivning:
+          type: string
+        skapadAv:
+          type: string
+        datumRegistrerad:
+          type: string
+          format: date-time
+        modifieradAv:
+          type: string
+        datumModifierad:
+          type: string
+          format: date-time
+        aktivFrom:
+          type: string
+        aktivTom:
+          type: string
+    TelefonIn:
+      type: object
+      properties:
+        typ:
+          type: string
+          enum:
+            - BOSTAD
+            - ARBETE
+            - AVFLYTTAD
+            - MOBIL
+        telefonNr:
+          type: string
+    NyEnhetIn:
+      type: object
+      properties:
+        enhetsTyp:
+          type: string
+    ArbetsorderTypUt:
+      type: object
+      properties:
+        arbetsordertypKod:
+          type: string
+        arbetsordertypBesk:
+          type: string
+    AccepteradUt:
+      type: object
+      properties:
+        datumAccepterad:
+          type: string
+    InformationUt:
+      type: object
+      properties:
+        beskrivning:
+          type: string
+        kommentar:
+          type: string
+        anmarkning:
+          type: string
+        atgard:
+          type: string
+    ArbetsorderFilerIn:
+      required:
+        - fil
+      type: object
+      properties:
+        fil:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArbetsorderFilIn'
+    PersontidPostUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    ResursUt:
+      type: object
+      properties:
+        id:
+          type: string
+        namn:
+          type: string
+        kommunikation:
+          $ref: '#/components/schemas/ResursKommunikationUt'
+    PersontidGetUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        arbetsorderId:
+          type: integer
+          format: int64
+        resursId:
+          type: string
+        timmar:
+          type: number
+        minuter:
+          type: integer
+          format: int32
+        starttid:
+          type: string
+        sluttid:
+          type: string
+        datumFom:
+          type: string
+        datumTom:
+          type: string
+        aktivitet:
+          type: string
+        frasId:
+          type: integer
+          format: int64
+        pris:
+          type: integer
+          format: int64
+    ArbetsorderAvbokningIn:
+      type: object
+      properties:
+        forcera:
+          type: boolean
+    BestalldUt:
+      type: object
+      properties:
+        datumBestalld:
+          type: string
+        bestalldAv:
+          $ref: '#/components/schemas/ResursUt'
+    KommunikationIn:
+      type: object
+      properties:
+        epostAdress:
+          type: string
+        telefon:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelefonIn'
+    KommunikationUt:
+      type: object
+      properties:
+        epostAdress:
+          type: string
+        telefon:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelefonUt'
+    KundUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        kundnummer:
+          type: string
+        namnHela:
+          type: string
+        kommunikation:
+          $ref: '#/components/schemas/KommunikationUt'
+    AuthUt:
+      required:
+        - access_token
+        - expires_in
+        - refresh_token
+        - token_type
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+        expires_in:
+          type: integer
+          format: int32
+        refresh_token:
+          type: string
+    LoginSsoIn:
+      required:
+        - ssoId
+        - ssoIdHash
+        - ssoTimestamp
+        - ssoTimestampHash
+      type: object
+      properties:
+        ssoId:
+          type: string
+        ssoIdHash:
+          type: string
+        ssoTimestamp:
+          type: string
+        ssoTimestampHash:
+          type: string
+    FederatedLoginIn:
+      required:
+        - id_token
+      type: object
+      properties:
+        id_token:
+          type: string
+    RefreshIn:
+      required:
+        - refresh_token
+      type: object
+      properties:
+        refresh_token:
+          type: string
+    LoginIn:
+      required:
+        - password
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    EntreprenorArbetsorderUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        externtId:
+          type: string
+        externtNr:
+          type: string
+        objekt:
+          $ref: '#/components/schemas/ArbetsorderObjektUt'
+        kund:
+          $ref: '#/components/schemas/ArbetsorderKundUt'
+        bunt:
+          $ref: '#/components/schemas/BuntUt'
+        utforare:
+          $ref: '#/components/schemas/ResursUt'
+        status:
+          $ref: '#/components/schemas/ArbetsorderStatusUt'
+        utrymme:
+          $ref: '#/components/schemas/ArbetsorderUtrymmeUt'
+        enhet:
+          $ref: '#/components/schemas/ArbetsorderEnhetUt'
+        nyEnhet:
+          $ref: '#/components/schemas/NyEnhetUt'
+        fras:
+          $ref: '#/components/schemas/FrasUt'
+        information:
+          $ref: '#/components/schemas/InformationUt'
+        arbetsorderTyp:
+          $ref: '#/components/schemas/ArbetsorderTypUt'
+        tilltrade:
+          $ref: '#/components/schemas/TilltradeUt'
+        prio:
+          $ref: '#/components/schemas/PrioUt'
+        bestalld:
+          $ref: '#/components/schemas/BestalldUt'
+        accepterad:
+          $ref: '#/components/schemas/AccepteradUt'
+        utford:
+          $ref: '#/components/schemas/UtfordUt'
+        referens:
+          $ref: '#/components/schemas/ResursUt'
+        planering:
+          $ref: '#/components/schemas/PlaneringUt'
+        fakturaInformation:
+          $ref: '#/components/schemas/FakturaInformation'
+        annanAnmalare:
+          $ref: '#/components/schemas/AnnanAnmalareUt'
+        nyckelinformation:
+          $ref: '#/components/schemas/Nyckelinformation'
+    EntreprenorFilUt:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        beskrivning:
+          type: string
+        typKod:
+          type: string
+    FakturaInformation:
+      type: object
+      properties:
+        fakturaRad1:
+          type: string
+        fakturaRad2:
+          type: string
+        fakturaRad3:
+          type: string
+        fakturaRad4:
+          type: string
+    BokningTilltradeIn:
+      type: object
+      properties:
+        id:
+          type: string
+        kommentar:
+          type: string
+    BokningTilltrade:
+      type: object
+      properties:
+        id:
+          type: string
+        beskrivning:
+          type: string
+        kommentar:
+          type: string
+    Tilltrade:
+      type: object
+      properties:
+        id:
+          type: string
+        beskrivning:
+          type: string
+  securitySchemes:
+    default:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'https://test.com'
+          scopes: {}
+          x-scopes-bindings: {}

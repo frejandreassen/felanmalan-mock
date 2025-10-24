@@ -1,18 +1,54 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import QRCode from 'qrcode';
 import { getRoomsForProperty, categories } from '@/lib/data';
 import { objekt as objektList, type Objekt, getAddressString } from '@/lib/fastaStrukturenStore';
 import Combobox from '@/components/Combobox';
 import MapDialog from '@/components/MapDialog';
-import Header from '@/components/Header';
 
-// Convert Objekt to the format expected by old components
-const properties = objektList;
+export interface QRGeneratorWidgetProps {
+  /** Base URL for the API endpoints */
+  apiBaseUrl?: string;
 
-export default function QRGeneratorPage() {
+  /** Google Maps API key for map functionality */
+  googleMapsApiKey?: string;
+
+  /** Base URL for generated QR codes (e.g., 'https://your-intranet.com') */
+  baseUrl?: string;
+
+  /** Custom CSS class name for the container */
+  className?: string;
+}
+
+/**
+ * QRGeneratorWidget - QR code generator for fault reporting
+ *
+ * This component generates QR codes that link to the fault reporting form
+ * with pre-filled property and room information. Users can print or download
+ * the QR codes to place at specific locations.
+ *
+ * @example
+ * ```tsx
+ * import { QRGeneratorWidget } from 'felanmalan-widgets';
+ *
+ * function QRPage() {
+ *   return (
+ *     <QRGeneratorWidget
+ *       apiBaseUrl="/api/felanmalan"
+ *       baseUrl="https://intranet.example.com"
+ *     />
+ *   );
+ * }
+ * ```
+ */
+export default function QRGeneratorWidget({
+  apiBaseUrl,
+  googleMapsApiKey,
+  baseUrl,
+  className = ''
+}: QRGeneratorWidgetProps) {
   const [selectedPropertyId, setSelectedPropertyId] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<Objekt | undefined>(undefined);
   const [selectedLocation, setSelectedLocation] = useState('inomhus');
@@ -23,12 +59,15 @@ export default function QRGeneratorPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const printAreaRef = useRef<HTMLDivElement>(null);
 
+  // TODO: Use apiBaseUrl and googleMapsApiKey from props
+  const properties = objektList;
+
   useEffect(() => {
     if (selectedPropertyId) {
       const prop = properties.find(p => p.id === selectedPropertyId);
       setSelectedProperty(prop);
     }
-  }, [selectedPropertyId]);
+  }, [selectedPropertyId, properties]);
 
   const propertyOptions = properties.map(p => ({
     value: p.id,
@@ -54,7 +93,7 @@ export default function QRGeneratorPage() {
 
     try {
       // Build URL with query parameters
-      const baseUrl = window.location.origin;
+      const effectiveBaseUrl = baseUrl || (typeof window !== 'undefined' ? window.location.origin : '');
       const params = new URLSearchParams();
       params.append('objekt', selectedProperty.id);
       if (selectedRoom) {
@@ -62,10 +101,8 @@ export default function QRGeneratorPage() {
         if (room) params.append('rum', room.id);
       }
 
-      const url = `${baseUrl}/?${params.toString()}`;
+      const url = `${effectiveBaseUrl}/?${params.toString()}`;
       setGeneratedUrl(url);
-
-      console.log('Generating QR code for URL:', url);
 
       // Generate QR code data URL
       const dataUrl = await QRCode.toDataURL(url, {
@@ -77,7 +114,6 @@ export default function QRGeneratorPage() {
         }
       });
 
-      console.log('QR code generated successfully');
       setQrCodeUrl(dataUrl);
     } catch (err) {
       console.error('Error generating QR code:', err);
@@ -113,7 +149,7 @@ export default function QRGeneratorPage() {
   const handleMapSelect = (property: Objekt) => {
     setSelectedPropertyId(property.id);
     setSelectedProperty(property);
-    setSelectedRoom(''); // Reset room when property changes
+    setSelectedRoom('');
     setIsMapOpen(false);
   };
 
@@ -140,11 +176,7 @@ export default function QRGeneratorPage() {
         }
       `}</style>
 
-      <div className="no-print">
-        <Header />
-      </div>
-
-      <div className="min-h-screen bg-gray-50">
+      <div className={`qr-generator-widget ${className}`}>
         <div className="container mx-auto px-4 py-8">
           <div className="no-print mb-8">
             <h1 className="text-3xl font-bold mb-2">QR-kod Generator</h1>
@@ -166,7 +198,7 @@ export default function QRGeneratorPage() {
                         value={selectedPropertyId}
                         onChange={(value) => {
                           setSelectedPropertyId(value);
-                          setSelectedRoom(''); // Reset room when property changes
+                          setSelectedRoom('');
                         }}
                         placeholder="Sök fastighet..."
                       />

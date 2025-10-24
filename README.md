@@ -1,6 +1,6 @@
-# Felanmälan - Falkenbergs kommun (Mock)
+# Felanmälan - Falkenbergs kommun
 
-Ett mockup-projekt för att testa felanmälningssystemet för Falkenbergs kommun. Byggt med Next.js, TypeScript och Tailwind CSS med **182 riktiga fastigheter**, Google Maps-integration och **Mock Arbetsorder API**.
+En Next.js-applikation för felanmälan med **182 riktiga fastigheter**, Google Maps-integration och mock API. Projektet är under utveckling och innehåller en fungerande felanmälningsform.
 
 ## 🚀 Kom igång
 
@@ -20,9 +20,15 @@ npm run dev
 
 ## ✨ Funktioner
 
-### 1. Alla 182 fastigheter från Ekofast
+### 1. Dynamisk fastighetshämtning från API
 
-Alla fastigheter från `fastigheter_ekofast.csv` finns med:
+Formuläret hämtar fastigheter dynamiskt från API:t vid laddning:
+- **Just nu**: Mock API serverar 182 fastigheter från `properties.json`
+- **I framtiden**: Samma anrop går till riktiga FAST2 API:t
+- API endpoint: `GET /api/v1/fastastrukturen/objekt`
+- Stödjer filtrering per kategori: `?kategori=skola`
+
+Fastighetskategorier:
 - Skolor (103xx)
 - Förskolor (104xx)
 - Idrottshallar (102xx)
@@ -41,17 +47,23 @@ Alla fastigheter från `fastigheter_ekofast.csv` finns med:
 
 Alla fastigheter är geocodade med exakta koordinater från Google Maps API.
 
-### 3. Smart formulär med dynamiska fält
+### 3. Smart formulär med dynamiska fält från API
 
-Formuläret anpassar sig baserat på fastighetskategori:
-- **Utrymme**: Inomhus, Utomhus, Skadegörelse
-- **Lokal/rum**: Filteras baserat på vald fastighet och utrymme
-  - Skolor: Klassrum, Storkök, WC
-  - Förskolor: Lekrum, Sovrum
+Formuläret hämtar och anpassar fält baserat på vald fastighet:
+- **Utrymmen**: Hämtas från API baserat på vald fastighet och typ (inomhus/utomhus)
+  - API endpoint: `GET /api/v1/fastastrukturen/utrymmen?objektId={id}&typ={typ}`
+  - Skolor: Klassrum, Matsal, Storkök, WC, Skolgård
+  - Förskolor: Avdelningar, Kök, Hall, Lekplats
   - Idrottshallar: Gymnastiksal, Omklädningsrum, Dusch
-  - Äldreboenden: Boenderum, Gemensamt utrymme
-  - Förvaltning: Kontor, Mötesrum
-- **Enhet/System**: Belysning, Ventilation, Värme, Lekutrustning, etc.
+  - Äldreboenden: Boenderum, Matsal, Trädgård
+  - Förvaltning: Kontor, Konferensrum, Reception
+
+- **Enheter**: Hämtas från API baserat på valt utrymme
+  - API endpoint: `GET /api/v1/fastastrukturen/enheter?utrymmesId={id}`
+  - Belysning, Ventilation, Värme, El
+  - Köksutrustning (i kök)
+  - Sanitära enheter (i WC/dusch)
+  - Lekutrustning (på lekplatser)
 
 ### 4. Deep Links (Smarta länkar)
 
@@ -87,15 +99,19 @@ Visar pågående och nya ärenden med:
 - Visuell färgkodning per status
 - Uppdateringsknapp för att hämta senaste data
 
-### 7. 🔌 Mock Arbetsorder API
+### 7. 🔌 Fungerande Mock API
 
-**Helt fungerande mock-API** baserat på FAST2 Arbetsorder API v1.8:
+**Fullständigt mock-API** som simulerar FAST2 API:
 - **POST /api/v1/auth/login** - Autentisering
+- **GET /api/v1/fastastrukturen/objekt** - Hämta fastigheter
+- **GET /api/v1/fastastrukturen/utrymmen** - Hämta utrymmen för fastighet
+- **GET /api/v1/fastastrukturen/enheter** - Hämta enheter för utrymme
 - **POST /api/v1/arbetsorder** - Skapa arbetsorder
 - **GET /api/v1/arbetsorder** - Lista arbetsordrar (med filter)
 - **GET /api/v1/arbetsorder/:id** - Hämta specifik arbetsorder
 
-Arbetsordrar lagras i minnet (in-memory store) och persisterar under serverns livstid.
+Mock-data genereras från `properties.json` och lagras i minnet under serverns livstid.
+**Formuläret använder samma API-anrop som kommer användas mot riktiga API:t.**
 
 ## 📊 Datastruktur
 
@@ -122,24 +138,38 @@ Alla fastigheter har:
 ```
 felanmalan-mock/
 ├── app/
-│   ├── api/v1/             # Mock API endpoints
-│   │   ├── auth/login/     # Autentisering
-│   │   └── arbetsorder/    # Arbetsorder endpoints
-│   ├── layout.tsx          # Root layout med Google Maps script
-│   ├── page.tsx            # Huvudsida med deep linking och Suspense
-│   └── globals.css         # Globala styles
+│   ├── api/v1/                    # Mock API endpoints (simulerar FAST2 API)
+│   │   ├── auth/login/            # Autentisering
+│   │   ├── fastastrukturen/       # Fastighetsstruktur-endpoints
+│   │   │   ├── objekt/            # GET fastigheter
+│   │   │   ├── utrymmen/          # GET utrymmen
+│   │   │   └── enheter/           # GET enheter
+│   │   └── arbetsorder/           # Arbetsorder endpoints (POST/GET)
+│   ├── layout.tsx                 # Root layout med Google Maps script
+│   ├── page.tsx                   # Huvudsida med deep linking
+│   └── globals.css                # Globala styles
 ├── components/
-│   ├── Header.tsx          # Header med navigation
-│   ├── ReportForm.tsx      # Felanmälningsformulär med API-integration
-│   ├── ReportStatus.tsx    # Ärendestatus med live-data från API
-│   ├── Combobox.tsx        # Återanvändbar combobox-komponent
-│   └── MapDialog.tsx       # Kartdialog med Google Maps
+│   ├── Header.tsx                 # Header
+│   ├── ReportForm.tsx             # Formulär (hämtar data från API)
+│   ├── ReportStatus.tsx           # Ärendestatus (hämtar från API)
+│   ├── Combobox.tsx               # Återanvändbar combobox
+│   └── MapDialog.tsx              # Kartdialog med Google Maps
 ├── lib/
-│   ├── data.ts             # Data och hjälpfunktioner
-│   ├── properties.json     # Alla 182 fastigheter med geocoding
-│   ├── apiClient.ts        # API-klient för arbetsorder API
-│   └── mockStore.ts        # In-memory datalagring för arbetsordrar
+│   ├── properties.json            # 182 fastigheter (källa för mock API)
+│   ├── fastaStrukturenStore.ts    # Mock data store (används av API)
+│   ├── apiClient.ts               # API-klient (används av formulär)
+│   ├── mockStore.ts               # In-memory lagring för arbetsordrar
+│   └── coordinateTransform.ts     # SWEREF99/RT90 → WGS84 transformation
 └── ...
+```
+
+**Dataflöde:**
+```
+ReportForm (komponent)
+  → apiClient.listObjekt()
+    → GET /api/v1/fastastrukturen/objekt
+      → fastaStrukturenStore.getAllObjekt()
+        → properties.json
 ```
 
 ## 🛠️ Geocoding-script
@@ -153,36 +183,27 @@ GOOGLE_MAPS_API_KEY=your_key node geocode-properties.js
 
 Detta skapar `fastigheter_ekofast_geocoded.csv` med lat/lng för alla fastigheter.
 
-## 🔧 Anpassa data
+## 🔧 Hur mock-data fungerar
 
-### Lägga till nya fastigheter
+### Från statisk CSV till dynamiskt API
 
-1. Redigera `/Users/frej/Utvecklingsavd/felanmalan/fastigheter_ekofast.csv`
-2. Kör geocoding-scriptet (se ovan)
-3. Konvertera till JSON (scriptet gör detta automatiskt)
-4. Rebuilda appen
+1. **properties.json** innehåller 182 geocodade fastigheter
+2. **fastaStrukturenStore.ts** läser JSON och genererar:
+   - Objekt (fastigheter)
+   - Utrymmen (rum/lokaler) baserat på kategori
+   - Enheter (system) baserat på utrymmestyp
+3. **API routes** exponerar denna data via REST endpoints
+4. **Formuläret** hämtar data dynamiskt via API-anrop
 
-### Lägga till nya rum/utrymmen
+### När ska properties.json uppdateras?
 
-Redigera `lib/data.ts`:
+**Inte ofta!** I produktion kommer data från riktiga API:t.
+Mock-data används bara för utveckling och tester.
 
-```typescript
-export const rooms: Room[] = [
-  { id: 'nytt-rum', propertyId: 'skolor', name: 'Nytt rum', type: 'inomhus' },
-  // ...
-];
-```
-
-### Lägga till nya enheter/system
-
-Redigera `lib/data.ts`:
-
-```typescript
-export const units: Category[] = [
-  { id: 'ny-enhet', name: 'Ny enhet' },
-  // ...
-];
-```
+Om du behöver uppdatera mock-data:
+1. Lägg till/redigera i `properties.json`
+2. Starta om dev-servern (`npm run dev`)
+3. Mock API:t serverar nya data automatiskt
 
 ## 📱 Användning för användartester
 
@@ -298,23 +319,39 @@ curl -X GET http://localhost:3000/api/v1/arbetsorder \
 }
 ```
 
-## 📝 Nästa steg
+## 📝 Utvecklingsplan
 
-Möjliga förbättringar:
-1. ✅ Geocoding av alla fastigheter - **KLART**
-2. ✅ Kartintegration - **KLART**
-3. ✅ Mock Arbetsorder API - **KLART**
-4. ✅ Formulär kommunicerar med API - **KLART**
-5. ✅ Statusvy visar live-data - **KLART**
-6. Ersätt mock API med riktigt FAST2 API
-7. Bilduppladdning till server
-8. E-postnotifikationer
-9. Statusuppdateringar i realtid med WebSockets
-10. Autentisering för internanvändare
-11. Dashboard för att hantera inkomna ärenden
-12. Filtrera fastigheter efter kategori på kartan
-13. Exportera QR-koder för alla fastigheter automatiskt
+### Fas 1: Grundläggande Next.js app (Pågående)
+- ✅ Felanmälningsformulär
+- ✅ 182 fastigheter med geocoding
+- ✅ Google Maps-integration
+- ✅ Mock API för utveckling
+- ✅ Statusvy
+- ⏳ Bilduppladdning
+- ⏳ Formulärvalidering och förbättringar
+- ⏳ Responsiv design och tillgänglighet
+
+### Fas 2: Backend-integration (Framtida)
+- Integration med FAST2 Arbetsorder API
+- Autentisering
+- Databaslagring
+- E-postnotifikationer
+
+### Fas 3: Joomla-integration (Framtida)
+- Exportera som React-komponenter
+- Joomla-modul
+- Deployment i befintlig infrastruktur
+
+## 🎯 Aktuell status
+
+Detta projekt är under aktiv utveckling. Fokus är att bygga en fullständig och fungerande felanmälningsapplikation i Next.js med mock-data.
+
+**Nästa steg:**
+1. Förbättra formulärvalidering
+2. Implementera bilduppladdning
+3. Förbättra responsiv design
+4. Användartester
 
 ## 📄 Licens
 
-Detta är ett mockup-projekt för testning och utveckling.
+Utvecklingsprojekt för Falkenbergs kommun.

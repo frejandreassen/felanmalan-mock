@@ -4,67 +4,84 @@ import { mockStore } from '@/lib/mockStore';
 // POST /api/v1/arbetsorder - Create work order
 export async function POST(request: NextRequest) {
   try {
-    // Check auth token (mock validation)
+    // Check X-Auth-Token header (exact copy of real API)
     const authToken = request.headers.get('X-Auth-Token');
+
     if (!authToken) {
       return NextResponse.json(
-        { error: 'Missing authentication token' },
+        { error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
     const body = await request.json();
 
-    // Validate required fields
-    if (!body.objekt?.id) {
+    // Validate required fields according to ArbetsorderPostIn spec
+    const errors: string[] = [];
+
+    if (!body.arbetsordertypKod) {
+      errors.push('arbetsordertypKod is required');
+    }
+
+    if (!body.kundNr) {
+      errors.push('kundNr is required');
+    }
+
+    if (!body.objektId) {
+      errors.push('objektId is required');
+    }
+
+    if (body.ursprung === undefined || body.ursprung === null) {
+      errors.push('ursprung is required');
+    }
+
+    if (errors.length > 0) {
       return NextResponse.json(
-        { error: 'objekt.id is required' },
+        {
+          error: 'Validation failed',
+          details: errors
+        },
         { status: 400 }
       );
     }
 
-    if (!body.information?.beskrivning) {
-      return NextResponse.json(
-        { error: 'information.beskrivning is required' },
-        { status: 400 }
-      );
-    }
-
-    // Create work order
+    // Create work order matching ArbetsorderPostIn structure
     const workOrder = mockStore.createWorkOrder({
+      // Required fields
+      arbetsordertypKod: body.arbetsordertypKod,
+      kundNr: body.kundNr,
+      objektId: body.objektId,
+      ursprung: body.ursprung,
+
+      // Optional fields
       externtId: body.externtId,
-      objekt: {
-        id: body.objekt.id,
-        namn: body.objekt.namn || 'Unknown',
-        adress: body.objekt.adress
-      },
-      utrymme: body.utrymme ? {
-        id: body.utrymme.id,
-        namn: body.utrymme.namn
-      } : undefined,
-      enhet: body.enhet ? {
-        id: body.enhet.id,
-        namn: body.enhet.namn
-      } : undefined,
-      information: {
-        beskrivning: body.information.beskrivning,
-        kommentar: body.information.kommentar
-      },
-      kund: body.kund,
-      annanAnmalare: body.annanAnmalare,
-      arbetsorderTyp: body.arbetsorderTyp || {
-        arbetsordertypKod: 'F',
-        arbetsordertypBesk: 'Felanmälan'
-      },
-      prio: body.prio || {
-        prioKod: '10',
-        prioBesk: 'Normal'
-      },
-      tilltrade: body.tilltrade,
-      bilder: body.bilder
+      externtNr: body.externtNr,
+      buntId: body.buntId,
+      resursId: body.resursId,
+      statusKod: body.statusKod,
+      utrymmesId: body.utrymmesId,
+      enhetsId: body.enhetsId,
+      enhetsNotering: body.enhetsNotering,
+      nyEnhet: body.nyEnhet,
+      frasNr: body.frasNr,
+      information: body.information,
+      tilltradeKod: body.tilltradeKod,
+      prioKod: body.prioKod,
+      anmalare: body.anmalare,
+      planering: body.planering,
+      ekonomi: body.ekonomi,
+      fakturera: body.fakturera,
+      kundPrimarKontaktsatt: body.kundPrimarKontaktsatt,
+      bokning: body.bokning
     });
 
-    return NextResponse.json(workOrder, { status: 201 });
+    // Return response matching ArbetsorderPostUt structure
+    return NextResponse.json(
+      {
+        id: workOrder.id
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating work order:', error);
     return NextResponse.json(
@@ -77,11 +94,12 @@ export async function POST(request: NextRequest) {
 // GET /api/v1/arbetsorder - List work orders
 export async function GET(request: NextRequest) {
   try {
-    // Check auth token (mock validation)
+    // Check X-Auth-Token header (exact copy of real API)
     const authToken = request.headers.get('X-Auth-Token');
+
     if (!authToken) {
       return NextResponse.json(
-        { error: 'Missing authentication token' },
+        { error: 'Unauthorized' },
         { status: 401 }
       );
     }

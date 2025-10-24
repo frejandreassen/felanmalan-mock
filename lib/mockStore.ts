@@ -55,6 +55,7 @@ export interface WorkOrder {
     datumModifierad: string;
     modifieradAv: string;
   };
+  ursprung?: number; // 1 = Web Portal, 99 = Confidential/Hidden
   bilder?: string[];
 }
 
@@ -99,8 +100,14 @@ export const mockStore = {
     objektId?: string;
     statusKod?: string;
     limit?: number;
+    includeConfidential?: boolean;
   }): WorkOrder[] => {
     let orders = Array.from(workOrders.values());
+
+    // Filter out confidential work orders by default (ursprung: 99)
+    if (!filter?.includeConfidential) {
+      orders = orders.filter(wo => wo.ursprung !== 99);
+    }
 
     if (filter?.objektId) {
       orders = orders.filter(wo => wo.objekt.id === filter.objektId);

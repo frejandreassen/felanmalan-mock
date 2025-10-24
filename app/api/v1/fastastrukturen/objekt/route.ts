@@ -4,11 +4,12 @@ import { fastaStrukturenStore } from '@/lib/fastaStrukturenStore';
 // GET /api/v1/fastastrukturen/objekt - List all reportable objekt
 export async function GET(request: NextRequest) {
   try {
-    // Check auth token (mock validation)
+    // Check X-Auth-Token header (exact copy of real API)
     const authToken = request.headers.get('X-Auth-Token');
+
     if (!authToken) {
       return NextResponse.json(
-        { error: 'Missing authentication token' },
+        { error: 'Unauthorized' },
         { status: 401 }
       );
     }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import type { Objekt } from '@/lib/fastaStrukturenStore';
+import { getAddressString } from '@/lib/fastaStrukturenStore';
 
 interface MapDialogProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ export default function MapDialog({
           <div style="padding: 8px; min-width: 200px;">
             <h3 style="margin: 0 0 8px 0; font-weight: bold;">${property.namn}</h3>
             ${property.objektNr ? `<p style="margin: 0 0 4px 0; color: #666; font-size: 12px;">${property.objektNr}</p>` : ''}
-            <p style="margin: 0; font-size: 12px; color: #666;">${property.adress}</p>
+            <p style="margin: 0; font-size: 12px; color: #666;">${getAddressString(property.adress)}</p>
             <button
               onclick="window.selectPropertyFromMap('${property.id}')"
               style="margin-top: 8px; padding: 6px 12px; background: #ec4899; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;"
