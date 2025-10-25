@@ -15,8 +15,8 @@ import { mockStore } from '../mockStore';
 export async function proxyToMockApi(
   path: string,
   method: string,
-  body?: any
-): Promise<{ status: number; data: any }> {
+  body?: unknown
+): Promise<{ status: number; data: unknown }> {
 
   // Parse path to determine which endpoint
   if (path.startsWith('/v1/fastastrukturen/objekt')) {
@@ -81,8 +81,23 @@ export async function proxyToMockApi(
 
   if (path === '/v1/arbetsorder') {
     if (method === 'POST') {
+      // Type assertion for body
+      const requestBody = body as {
+        arbetsordertypKod?: string;
+        kundNr?: string;
+        objektId?: string;
+        ursprung?: number;
+        externtId?: string;
+        utrymmesId?: number;
+        enhetsId?: number;
+        information?: { beskrivning?: string; kommentar?: string };
+        anmalare?: { namn?: string; telefon?: string; epostAdress?: string };
+        prioKod?: string;
+        tilltradeKod?: string;
+      };
+
       // Validate required fields
-      if (!body.arbetsordertypKod || !body.kundNr || !body.objektId || body.ursprung === undefined) {
+      if (!requestBody.arbetsordertypKod || !requestBody.kundNr || !requestBody.objektId || requestBody.ursprung === undefined) {
         return {
           status: 400,
           data: {
@@ -92,7 +107,46 @@ export async function proxyToMockApi(
         };
       }
 
-      const workOrder = mockStore.createWorkOrder(body);
+      // Transform API request format to internal WorkOrder format
+      const workOrder = mockStore.createWorkOrder({
+        objekt: {
+          id: requestBody.objektId,
+          namn: `Objekt ${requestBody.objektId}`,
+        },
+        externtId: requestBody.externtId,
+        utrymme: requestBody.utrymmesId ? {
+          id: requestBody.utrymmesId.toString(),
+          namn: `Utrymme ${requestBody.utrymmesId}`
+        } : undefined,
+        enhet: requestBody.enhetsId ? {
+          id: requestBody.enhetsId.toString(),
+          namn: `Enhet ${requestBody.enhetsId}`
+        } : undefined,
+        information: {
+          beskrivning: requestBody.information?.beskrivning || '',
+          kommentar: requestBody.information?.kommentar
+        },
+        annanAnmalare: requestBody.anmalare && requestBody.anmalare.namn ? {
+          namn: requestBody.anmalare.namn,
+          telefon: requestBody.anmalare.telefon,
+          epostAdress: requestBody.anmalare.epostAdress
+        } : undefined,
+        arbetsorderTyp: {
+          arbetsordertypKod: requestBody.arbetsordertypKod as 'F' | 'U' | 'G',
+          arbetsordertypBesk: requestBody.arbetsordertypKod === 'F' ? 'Felanmälan' :
+                             requestBody.arbetsordertypKod === 'U' ? 'Underhåll' : 'Garanti'
+        },
+        prio: {
+          prioKod: (requestBody.prioKod || '30') as '10' | '30',
+          prioBesk: requestBody.prioKod === '10' ? 'Akut' : 'Normal'
+        },
+        tilltrade: requestBody.tilltradeKod ? {
+          tilltradeKod: requestBody.tilltradeKod as 'J' | 'N',
+          tilltradeBesk: requestBody.tilltradeKod === 'J' ? 'Ja' : 'Nej'
+        } : undefined,
+        ursprung: requestBody.ursprung,
+      });
+
       return {
         status: 201,
         data: { id: workOrder.id }

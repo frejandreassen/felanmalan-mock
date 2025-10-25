@@ -8,7 +8,12 @@
  * against the FAST2 API Gateway.
  */
 
-import { obtainOAuth2Token, getOAuth2ConfigFromEnv, isTokenExpired } from '../lib/oauth2Client';
+import { obtainOAuth2Token, isTokenExpired } from '../lib/bff/oauth2Client';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+// Load environment variables
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
 async function testOAuth2() {
   console.log('=== OAuth2 Authentication Test ===\n');
@@ -16,7 +21,20 @@ async function testOAuth2() {
   try {
     // Get config from environment
     console.log('1. Loading OAuth2 configuration...');
-    const config = getOAuth2ConfigFromEnv();
+    const FAST2_BASE_URL = process.env.FAST2_BASE_URL;
+    const CONSUMER_KEY = process.env.CONSUMER_KEY;
+    const CONSUMER_SECRET = process.env.CONSUMER_SECRET;
+
+    if (!FAST2_BASE_URL || !CONSUMER_KEY || !CONSUMER_SECRET) {
+      throw new Error('Missing OAuth2 configuration in .env.local');
+    }
+
+    const config = {
+      tokenEndpoint: `${FAST2_BASE_URL}/oauth2/token`,
+      consumerKey: CONSUMER_KEY,
+      consumerSecret: CONSUMER_SECRET,
+    };
+
     console.log(`   Token endpoint: ${config.tokenEndpoint}`);
     console.log(`   Consumer key: ${config.consumerKey.substring(0, 10)}...`);
     console.log('   ✓ Configuration loaded\n');

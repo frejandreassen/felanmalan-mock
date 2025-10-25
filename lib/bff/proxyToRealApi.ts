@@ -23,7 +23,7 @@ interface ProxyConfig {
 export async function proxyToRealApi(
   path: string,
   method: string,
-  body?: any,
+  body?: unknown,
   config?: ProxyConfig
 ): Promise<Response> {
 

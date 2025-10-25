@@ -18,7 +18,7 @@ export default function ReportStatus() {
   const loadWorkOrders = async () => {
     try {
       setIsLoading(true);
-      await apiClient.login();
+      // BFF handles authentication - no need to login manually
 
       const filter = selectedFilter === 'all' ? {} : { statusKod: selectedFilter };
       const response = await apiClient.listWorkOrders({ ...filter, limit: 10 });

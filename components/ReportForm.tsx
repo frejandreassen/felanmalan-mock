@@ -92,10 +92,7 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
   const loadObjektList = async () => {
     setIsLoadingObjekt(true);
     try {
-      // Authenticate first
-      await apiClient.login();
-
-      // Fetch objekt list
+      // BFF handles authentication - no need to login manually
       const response = await apiClient.listObjekt();
       setObjektList(response.objekt || []);
     } catch (error) {
@@ -161,43 +158,28 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     setSubmitSuccess(false);
 
     try {
-      // Authenticate first (in real app, this would be done once and token stored)
-      await apiClient.login();
+      // BFF handles authentication - no need to login manually
 
-      // Create work order
+      // Create work order using FAST2 API format
       const workOrder = await apiClient.createWorkOrder({
-        externtId: orderType === 'bestallning' ? refCode : undefined,
+        arbetsordertypKod: orderType === 'felanmalan' ? 'F' : 'G',
+        kundNr: '1', // Default customer number for mock
+        objektId: selectedObjekt.id,
         ursprung: isConfidential ? 99 : 1, // 1 = Web Portal, 99 = Confidential
-        objekt: {
-          id: selectedObjekt.id,
-          namn: selectedObjekt.namn,
-          adress: getAddressString(selectedObjekt.adress)
-        },
-        utrymme: selectedUtrymme ? {
-          id: selectedUtrymme.id,
-          namn: selectedUtrymme.namn
-        } : undefined,
-        enhet: selectedEnhet ? {
-          id: selectedEnhet.id,
-          namn: selectedEnhet.namn
-        } : undefined,
+        externtId: orderType === 'bestallning' ? refCode : undefined,
+        utrymmesId: selectedUtrymme ? parseInt(selectedUtrymme.id) : undefined,
+        enhetsId: selectedEnhet ? parseInt(selectedEnhet.id) : undefined,
         information: {
           beskrivning: description,
           kommentar: undefined
         },
-        annanAnmalare: contactPerson ? {
+        anmalare: contactPerson ? {
           namn: contactPerson,
           telefon: '',
           epostAdress: email || undefined
         } : undefined,
-        arbetsorderTyp: orderType === 'felanmalan'
-          ? { arbetsordertypKod: 'F', arbetsordertypBesk: 'Felanmälan' }
-          : { arbetsordertypKod: 'G', arbetsordertypBesk: 'Beställning' },
-        prio: {
-          prioKod: '10',
-          prioBesk: 'Normal'
-        },
-        bilder: undefined
+        prioKod: '10',
+        tilltradeKod: undefined
       });
 
       setWorkOrderNumber(workOrder.id);

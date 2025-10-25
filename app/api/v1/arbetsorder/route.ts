@@ -45,34 +45,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create work order matching ArbetsorderPostIn structure
+    // Transform API request format to internal WorkOrder format
     const workOrder = mockStore.createWorkOrder({
-      // Required fields
-      arbetsordertypKod: body.arbetsordertypKod,
-      kundNr: body.kundNr,
-      objektId: body.objektId,
-      ursprung: body.ursprung,
-
-      // Optional fields
+      objekt: {
+        id: body.objektId,
+        namn: `Objekt ${body.objektId}`, // Would be looked up in real implementation
+      },
       externtId: body.externtId,
-      externtNr: body.externtNr,
-      buntId: body.buntId,
-      resursId: body.resursId,
-      statusKod: body.statusKod,
-      utrymmesId: body.utrymmesId,
-      enhetsId: body.enhetsId,
-      enhetsNotering: body.enhetsNotering,
-      nyEnhet: body.nyEnhet,
-      frasNr: body.frasNr,
-      information: body.information,
-      tilltradeKod: body.tilltradeKod,
-      prioKod: body.prioKod,
-      anmalare: body.anmalare,
-      planering: body.planering,
-      ekonomi: body.ekonomi,
-      fakturera: body.fakturera,
-      kundPrimarKontaktsatt: body.kundPrimarKontaktsatt,
-      bokning: body.bokning
+      utrymme: body.utrymmesId ? {
+        id: body.utrymmesId.toString(),
+        namn: `Utrymme ${body.utrymmesId}`
+      } : undefined,
+      enhet: body.enhetsId ? {
+        id: body.enhetsId.toString(),
+        namn: `Enhet ${body.enhetsId}`
+      } : undefined,
+      information: body.information || { beskrivning: '' },
+      annanAnmalare: body.anmalare,
+      arbetsorderTyp: {
+        arbetsordertypKod: body.arbetsordertypKod,
+        arbetsordertypBesk: body.arbetsordertypKod === 'F' ? 'Felanmälan' :
+                           body.arbetsordertypKod === 'U' ? 'Underhåll' : 'Garanti'
+      },
+      prio: {
+        prioKod: body.prioKod || '30',
+        prioBesk: body.prioKod === '10' ? 'Akut' : 'Normal'
+      },
+      tilltrade: body.tilltradeKod ? {
+        tilltradeKod: body.tilltradeKod,
+        tilltradeBesk: body.tilltradeKod === 'J' ? 'Ja' : 'Nej'
+      } : undefined,
+      ursprung: body.ursprung,
     });
 
     // Return response matching ArbetsorderPostUt structure

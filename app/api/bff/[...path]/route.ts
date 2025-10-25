@@ -17,14 +17,18 @@ const USE_MOCK_API = process.env.MOCK_API === 'true';
 
 /**
  * Handle all HTTP methods
+ * In Next.js 15, params is a Promise that must be awaited
  */
 async function handleRequest(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
+    // Await params (Next.js 15 requirement)
+    const resolvedParams = await params;
+
     // Reconstruct the path
-    const path = '/' + params.path.join('/');
+    const path = '/' + resolvedParams.path.join('/');
     const method = request.method;
 
     // Get request body for POST/PUT
@@ -62,18 +66,18 @@ async function handleRequest(
   }
 }
 
-export async function GET(request: NextRequest, context: { params: { path: string[] } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   return handleRequest(request, context);
 }
 
-export async function POST(request: NextRequest, context: { params: { path: string[] } }) {
+export async function POST(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   return handleRequest(request, context);
 }
 
-export async function PUT(request: NextRequest, context: { params: { path: string[] } }) {
+export async function PUT(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   return handleRequest(request, context);
 }
 
-export async function DELETE(request: NextRequest, context: { params: { path: string[] } }) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   return handleRequest(request, context);
 }
