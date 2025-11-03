@@ -37,29 +37,74 @@ class ApiClient {
     };
   }
 
-  // Create work order
+  // Upload temporary file (returns fileName to attach to work order)
+  async uploadTempFile(file: File): Promise<{ fileName: string }> {
+    const formData = new FormData();
+    formData.append('tempFile', file);
+
+    const response = await fetch(`${BFF_BASE_URL}/ao-produkt/v1/filetransfer/tempfile`, {
+      method: 'POST',
+      // Don't set Content-Type header - browser will set it with boundary for multipart/form-data
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    apiLogger?.log({
+      method: 'POST',
+      endpoint: '/api/bff/ao-produkt/v1/filetransfer/tempfile',
+      status: response.status,
+      requestBody: { fileName: file.name, fileSize: file.size, fileType: file.type },
+      responseBody: data,
+    });
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to upload file');
+    }
+
+    return data;
+  }
+
+  // Create work order (felanmälan or beställning)
   async createWorkOrder(workOrder: {
-    arbetsordertypKod: string;
-    kundNr: string;
-    objektId: string;
-    ursprung: number;
-    externtId?: string;
-    externtNr?: string;
+    arbetsordertypKod: string; // 'F' = Felanmälan, 'G' = Beställning/Eget
+    kundNr: string; // Customer number
+    objektId: string; // Required
+    ursprung: number; // 1 = Web Portal, 99 = Confidential
+    externtId?: string; // Reference code for beställning
     information?: {
-      beskrivning?: string;
-      kommentar?: string;
+      beskrivning?: string; // Description - visible to all
+      kommentar?: string; // Comment - for utförare
+      anmarkning?: string; // Internal note - only for company
     };
-    anmalare?: {
+    registreradAv?: { // Logged-in user (who created the work order)
+      id?: string;
       namn?: string;
-      telefon?: string;
-      epostAdress?: string;
+      kommunikation?: {
+        epostAdress?: string;
+        telefon?: Array<{
+          typ?: string;
+          telefonNr?: string;
+        }>;
+      };
     };
-    utrymmesId?: number;
-    enhetsId?: number;
-    tilltradeKod?: string;
-    prioKod?: string;
+    referens?: { // Contact person (who should be contacted)
+      id?: string;
+      namn?: string;
+      kommunikation?: {
+        epostAdress?: string;
+        telefon?: Array<{
+          typ?: string;
+          telefonNr?: string;
+        }>;
+      };
+    };
+    utrymmesId?: number; // Space ID
+    enhetsId?: number; // Unit ID
+    tilltradeKod?: string; // Access code: 'N' = No, 'J' = Yes
+    prioKod?: string; // Priority: '10' = Normal, '30' = Acute
   }) {
-    const response = await fetch(`${BFF_BASE_URL}/v1/arbetsorder`, {
+    const response = await fetch(`${BFF_BASE_URL}/ao-produkt/v1/arbetsorder`, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(workOrder),
@@ -69,7 +114,7 @@ class ApiClient {
 
     apiLogger?.log({
       method: 'POST',
-      endpoint: '/api/bff/v1/arbetsorder',
+      endpoint: '/api/bff/ao-produkt/v1/arbetsorder',
       status: response.status,
       requestBody: workOrder,
       responseBody: data,
@@ -140,15 +185,12 @@ class ApiClient {
     return data;
   }
 
-  // ===== Fasta Strukturen API Methods =====
+  // List work orders for a specific object (real API format)
+  async listWorkOrdersForObject(objektId: string, offset = 0) {
+    // Test: Fetch all work orders without filters
+    const endpoint = `/api/bff/ao-produkt/v1/arbetsorder`;
 
-  // List all objekt (properties/buildings)
-  async listObjekt(filter?: { kategori?: string }) {
-    const params = new URLSearchParams();
-    if (filter?.kategori) params.append('kategori', filter.kategori);
-
-    const queryString = params.toString();
-    const endpoint = `/api/bff/v1/fastastrukturen/objekt${queryString ? `?${queryString}` : ''}`;
+    console.log('[ApiClient] Fetching ALL work orders (no filters):', endpoint);
 
     const response = await fetch(endpoint, {
       method: 'GET',
@@ -165,7 +207,72 @@ class ApiClient {
     });
 
     if (!response.ok) {
+      throw new Error(data.error || 'Failed to list work orders for object');
+    }
+
+    return data;
+  }
+
+  // ===== Fasta Strukturen API Methods =====
+
+  // List all objekt (properties/buildings)
+  async listObjekt(filter?: { kategori?: string; kundId?: string }) {
+    // For real API, use the felanmalningsbara endpoint
+    // For mock API, fall back to old endpoint
+    const endpoint = `/api/bff/ao-produkt/v1/fastastrukturen/objekt/felanmalningsbara/uthyrningsbara`;
+
+    // Get kundId from environment or filter
+    const kundId = filter?.kundId || process.env.NEXT_PUBLIC_KUND_ID || '287436';
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        filter: {
+          kundId: kundId
+        }
+      }),
+    });
+
+    const data = await response.json();
+
+    apiLogger?.log({
+      method: 'POST',
+      endpoint,
+      status: response.status,
+      requestBody: { filter: { kundId } },
+      responseBody: data,
+    });
+
+    if (!response.ok) {
       throw new Error(data.error || 'Failed to list objekt');
+    }
+
+    // Transform GraphQL-style response to our format
+    if (data.edges && Array.isArray(data.edges)) {
+      return {
+        objekt: data.edges.map((edge: any) => {
+          const node = edge.node;
+
+          // Transform real API format to match our Objekt interface
+          return {
+            id: node.id,
+            objektNr: node.id, // Use ID as objektNr
+            namn: node.adress?.adress || 'Okänd fastighet', // Use street address as name
+            adress: node.adress,
+            lat: 0, // Coordinates not provided by real API for this endpoint
+            lng: 0,
+            kategori: node.typ?.objektsTyp?.toLowerCase() || 'ovrig',
+            fastighet: {
+              fastighetId: node.relationer?.fastighetNr || '',
+              fastighetNamn: `Fastighet ${node.relationer?.fastighetNr || ''}`
+            },
+            xkoord: node.adress?.xkoord,
+            ykoord: node.adress?.ykoord
+          };
+        }),
+        pageInfo: data.pageInfo
+      };
     }
 
     return data;
@@ -195,13 +302,12 @@ class ApiClient {
   }
 
   // List utrymmen (spaces/rooms) for an objekt
-  async listUtrymmen(objektId: string, typ?: 'inomhus' | 'utomhus') {
+  async listUtrymmen(objektId: string) {
     const params = new URLSearchParams();
     params.append('objektId', objektId);
-    if (typ) params.append('typ', typ);
 
     const queryString = params.toString();
-    const endpoint = `/api/bff/v1/fastastrukturen/utrymmen?${queryString}`;
+    const endpoint = `/api/bff/ao-produkt/v1/fastastrukturen/utrymmen?${queryString}`;
 
     const response = await fetch(endpoint, {
       method: 'GET',
@@ -221,6 +327,20 @@ class ApiClient {
       throw new Error(data.error || 'Failed to list utrymmen');
     }
 
+    // Transform real API response format to our format
+    // Real API returns: [{ id, beskrivning, rumsnummer, utrymmesTypKod }]
+    // We need: { utrymmen: [{ id, namn, objektId, typ }] }
+    if (Array.isArray(data)) {
+      return {
+        utrymmen: data.map((item: any) => ({
+          id: item.id.toString(),
+          namn: item.beskrivning || 'Okänt utrymme',
+          objektId: objektId,
+          typ: 'inomhus' // Default since real API doesn't distinguish
+        }))
+      };
+    }
+
     return data;
   }
 
@@ -230,7 +350,7 @@ class ApiClient {
     params.append('utrymmesId', utrymmesId);
 
     const queryString = params.toString();
-    const endpoint = `/api/bff/v1/fastastrukturen/enheter?${queryString}`;
+    const endpoint = `/api/bff/ao-produkt/v1/fastastrukturen/enheter?${queryString}`;
 
     const response = await fetch(endpoint, {
       method: 'GET',
@@ -248,6 +368,19 @@ class ApiClient {
 
     if (!response.ok) {
       throw new Error(data.error || 'Failed to list enheter');
+    }
+
+    // Transform real API response format to our format
+    // Real API returns: [{ id, beskrivning, enhetstypBesk, ... }]
+    // We need: { enheter: [{ id, namn, utrymmesId }] }
+    if (Array.isArray(data)) {
+      return {
+        enheter: data.map((item: any) => ({
+          id: item.id.toString(),
+          namn: item.beskrivning || item.enhetstypBesk || 'Okänd enhet',
+          utrymmesId: utrymmesId
+        }))
+      };
     }
 
     return data;

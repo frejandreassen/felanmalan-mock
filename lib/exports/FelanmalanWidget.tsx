@@ -15,8 +15,11 @@ export interface FelanmalanWidgetProps {
   /** Pre-select a property by ID */
   initialProperty?: string;
 
-  /** Pre-select a room/space by ID */
-  initialRoom?: string;
+  /** Pre-select a utrymme by ID */
+  initialUtrymme?: string;
+
+  /** Pre-select an enhet by ID */
+  initialEnhet?: string;
 
   /** Callback when work order is successfully created */
   onSubmitSuccess?: (workOrder: { id: string }) => void;
@@ -60,7 +63,8 @@ export default function FelanmalanWidget({
   apiBaseUrl,
   googleMapsApiKey,
   initialProperty = '',
-  initialRoom = '',
+  initialUtrymme = '',
+  initialEnhet = '',
   onSubmitSuccess,
   onSubmitError,
   className = '',
@@ -76,7 +80,8 @@ export default function FelanmalanWidget({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <ReportForm
             initialProperty={initialProperty}
-            initialRoom={initialRoom}
+            initialUtrymme={initialUtrymme}
+            initialEnhet={initialEnhet}
           />
           {showReportStatus && <ReportStatus />}
         </div>

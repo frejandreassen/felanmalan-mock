@@ -2,17 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import Combobox from './Combobox';
-import MapDialog from './MapDialog';
 import { apiClient } from '@/lib/apiClient';
 import type { Objekt, Utrymme, Enhet } from '@/lib/fastaStrukturenStore';
 import { getAddressString } from '@/lib/fastaStrukturenStore';
 
 interface ReportFormProps {
   initialProperty?: string;
-  initialRoom?: string;
+  initialUtrymme?: string;
+  initialEnhet?: string;
+  onWorkOrdersLoaded?: (workOrders: any[]) => void;
+  onObjektSelected?: (objekt: { id: string; namn: string } | null) => void;
 }
 
-export default function ReportForm({ initialProperty = '', initialRoom = '' }: ReportFormProps) {
+export default function ReportForm({ initialProperty = '', initialUtrymme = '', initialEnhet = '', onWorkOrdersLoaded, onObjektSelected }: ReportFormProps) {
   // Objekt state
   const [objektList, setObjektList] = useState<Objekt[]>([]);
   const [selectedObjektId, setSelectedObjektId] = useState(initialProperty);
@@ -20,26 +22,32 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
   const [isLoadingObjekt, setIsLoadingObjekt] = useState(false);
 
   // Utrymme state
-  const [utrymmesType, setUtrymmesType] = useState<'inomhus' | 'utomhus'>('inomhus');
   const [utrymmesOptions, setUtrymmesOptions] = useState<Utrymme[]>([]);
-  const [selectedUtrymmesId, setSelectedUtrymmesId] = useState(initialRoom);
+  const [selectedUtrymmesId, setSelectedUtrymmesId] = useState(initialUtrymme);
   const [selectedUtrymme, setSelectedUtrymme] = useState<Utrymme | undefined>(undefined);
   const [isLoadingUtrymmen, setIsLoadingUtrymmen] = useState(false);
 
   // Enhet state
   const [enheterOptions, setEnheterOptions] = useState<Enhet[]>([]);
-  const [selectedEnhetId, setSelectedEnhetId] = useState('');
+  const [selectedEnhetId, setSelectedEnhetId] = useState(initialEnhet);
   const [selectedEnhet, setSelectedEnhet] = useState<Enhet | undefined>(undefined);
   const [isLoadingEnheter, setIsLoadingEnheter] = useState(false);
+
+  // Mock customer (logged-in user / reporter) - Later from AD
+  const mockCustomer = {
+    namn: 'Frej Andreassen',
+    telefon: '0346-88 60 00',
+    epostAdress: 'frej.andreassen@falkenberg.se'
+  };
 
   // Form state
   const [orderType, setOrderType] = useState<'felanmalan' | 'bestallning'>('felanmalan');
   const [refCode, setRefCode] = useState('');
   const [description, setDescription] = useState('');
-  const [contactPerson, setContactPerson] = useState('Frej Andreassen');
-  const [email, setEmail] = useState('frej.andreassen@falkenberg.se');
+  const [contactPerson, setContactPerson] = useState(mockCustomer.namn);
+  const [phone, setPhone] = useState(mockCustomer.telefon);
+  const [email, setEmail] = useState(mockCustomer.epostAdress);
   const [image, setImage] = useState<File | null>(null);
-  const [isMapOpen, setIsMapOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -62,21 +70,38 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     }
   }, [initialProperty, objektList]);
 
-  // Handle initial room from URL
+  // Handle initial utrymme from URL
   useEffect(() => {
-    setSelectedUtrymmesId(initialRoom);
-  }, [initialRoom]);
+    if (initialUtrymme && utrymmesOptions.length > 0) {
+      const utrymme = utrymmesOptions.find(u => u.id === initialUtrymme);
+      if (utrymme) {
+        setSelectedUtrymmesId(initialUtrymme);
+        setSelectedUtrymme(utrymme);
+      }
+    }
+  }, [initialUtrymme, utrymmesOptions]);
+
+  // Handle initial enhet from URL
+  useEffect(() => {
+    if (initialEnhet && enheterOptions.length > 0) {
+      const enhet = enheterOptions.find(e => e.id === initialEnhet);
+      if (enhet) {
+        setSelectedEnhetId(initialEnhet);
+        setSelectedEnhet(enhet);
+      }
+    }
+  }, [initialEnhet, enheterOptions]);
 
   // Load utrymmen when objekt changes
   useEffect(() => {
     if (selectedObjektId) {
-      loadUtrymmen(selectedObjektId, utrymmesType);
+      loadUtrymmen(selectedObjektId);
     } else {
       setUtrymmesOptions([]);
       setSelectedUtrymmesId('');
       setSelectedUtrymme(undefined);
     }
-  }, [selectedObjektId, utrymmesType]);
+  }, [selectedObjektId]);
 
   // Load enheter when utrymme changes
   useEffect(() => {
@@ -88,6 +113,13 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
       setSelectedEnhet(undefined);
     }
   }, [selectedUtrymmesId]);
+
+  // Load work orders when object is selected
+  useEffect(() => {
+    if (selectedObjektId) {
+      loadWorkOrdersForObject(selectedObjektId);
+    }
+  }, [selectedObjektId]);
 
   const loadObjektList = async () => {
     setIsLoadingObjekt(true);
@@ -103,10 +135,11 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     }
   };
 
-  const loadUtrymmen = async (objektId: string, typ: 'inomhus' | 'utomhus') => {
+  const loadUtrymmen = async (objektId: string) => {
     setIsLoadingUtrymmen(true);
     try {
-      const response = await apiClient.listUtrymmen(objektId, typ);
+      const response = await apiClient.listUtrymmen(objektId);
+      console.log('[ReportForm] Loaded utrymmen:', response);
       setUtrymmesOptions(response.utrymmen || []);
 
       // Reset selected utrymme if it doesn't exist in new list
@@ -115,7 +148,7 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
         setSelectedUtrymme(undefined);
       }
     } catch (error) {
-      console.error('Error loading utrymmen:', error);
+      console.error('[ReportForm] Error loading utrymmen:', error);
       setUtrymmesOptions([]);
     } finally {
       setIsLoadingUtrymmen(false);
@@ -132,6 +165,26 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
       setEnheterOptions([]);
     } finally {
       setIsLoadingEnheter(false);
+    }
+  };
+
+  const loadWorkOrdersForObject = async (objektId: string) => {
+    try {
+      console.log('[ReportForm] Loading work orders for object:', objektId);
+      const response = await apiClient.listWorkOrdersForObject(objektId);
+      console.log('[ReportForm] Work orders loaded:', response);
+
+      // Pass work orders to parent component for display
+      if (onWorkOrdersLoaded && Array.isArray(response)) {
+        onWorkOrdersLoaded(response);
+      } else if (onWorkOrdersLoaded) {
+        onWorkOrdersLoaded([]);
+      }
+    } catch (error) {
+      console.error('Error loading work orders:', error);
+      if (onWorkOrdersLoaded) {
+        onWorkOrdersLoaded([]);
+      }
     }
   };
 
@@ -160,29 +213,83 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     try {
       // BFF handles authentication - no need to login manually
 
-      // Create work order using FAST2 API format
-      const workOrder = await apiClient.createWorkOrder({
-        arbetsordertypKod: orderType === 'felanmalan' ? 'F' : 'G',
-        kundNr: '1', // Default customer number for mock
-        objektId: selectedObjekt.id,
-        ursprung: isConfidential ? 99 : 1, // 1 = Web Portal, 99 = Confidential
-        externtId: orderType === 'bestallning' ? refCode : undefined,
-        utrymmesId: selectedUtrymme ? parseInt(selectedUtrymme.id) : undefined,
-        enhetsId: selectedEnhet ? parseInt(selectedEnhet.id) : undefined,
-        information: {
-          beskrivning: description,
-          kommentar: undefined
-        },
-        anmalare: contactPerson ? {
-          namn: contactPerson,
-          telefon: '',
-          epostAdress: email || undefined
-        } : undefined,
-        prioKod: '10',
-        tilltradeKod: undefined
-      });
+      // Step 1: Upload file if present
+      let uploadedFileName: string | undefined;
+      if (image) {
+        try {
+          const uploadResult = await apiClient.uploadTempFile(image);
+          uploadedFileName = uploadResult.fileName;
+          console.log('[ReportForm] File uploaded:', uploadedFileName);
+        } catch (error) {
+          console.error('[ReportForm] File upload failed:', error);
+          setSubmitError('Kunde inte ladda upp bild. Försök igen.');
+          setIsSubmitting(false);
+          return;
+        }
+      }
 
-      setWorkOrderNumber(workOrder.id);
+      // Step 2: Build work order payload
+      // Minimal payload based on API team feedback
+      // Check if contact person is different from anmalare (logged-in user)
+      const contactIsDifferent =
+        contactPerson !== mockCustomer.namn ||
+        phone !== mockCustomer.telefon ||
+        email !== mockCustomer.epostAdress;
+
+      // Build description - append reference code and contact info if needed
+      let finalDescription = description;
+
+      // Add reference code to description for beställning
+      if (orderType === 'bestallning' && refCode.trim()) {
+        finalDescription += `\n\nReferenskod: ${refCode}`;
+      }
+
+      // Append contact info if different from anmalare
+      if (contactIsDifferent) {
+        finalDescription += '\n\nOBS! Kontaktperson i ärendet är:\n';
+        if (contactPerson && contactPerson !== mockCustomer.namn) {
+          finalDescription += `Namn: ${contactPerson}\n`;
+        }
+        if (phone && phone !== mockCustomer.telefon) {
+          finalDescription += `Telefon: ${phone}\n`;
+        }
+        if (email && email !== mockCustomer.epostAdress) {
+          finalDescription += `E-post: ${email}`;
+        }
+      }
+
+      const workOrderPayload: any = {
+        arbetsordertypKod: orderType === 'felanmalan' ? 'F' : 'G', // F = Felanmälan, G = Beställning
+        kundNr: process.env.NEXT_PUBLIC_KUND_NR || 'SERVA10311',
+        objektId: selectedObjekt.id,
+        ursprung: '1', // Always 1 for Web Portal
+        information: {
+          beskrivning: finalDescription,
+        },
+        anmalare: {
+          namn: mockCustomer.namn, // Always use logged-in user as anmalare
+          telefon: mockCustomer.telefon,
+          epostAdress: mockCustomer.epostAdress
+        }
+      };
+
+      // Add optional fields only if they have values
+      if (isConfidential) {
+        workOrderPayload.externtNr = 'CONFIDENTIAL'; // Mark as confidential using externtNr
+      }
+
+      if (selectedUtrymme && selectedUtrymme.id) {
+        workOrderPayload.utrymmesId = parseInt(selectedUtrymme.id);
+      }
+
+      if (selectedEnhet && selectedEnhet.id) {
+        workOrderPayload.enhetsId = parseInt(selectedEnhet.id);
+      }
+
+      // Create work order
+      const workOrder = await apiClient.createWorkOrder(workOrderPayload);
+
+      setWorkOrderNumber(workOrder.arbetsorderId || workOrder.id);
       setSubmitSuccess(true);
 
       // Reset form after successful submission
@@ -207,21 +314,22 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     setSelectedObjekt(undefined);
     setSelectedUtrymmesId('');
     setSelectedUtrymme(undefined);
-    setUtrymmesType('inomhus');
     setSelectedEnhetId('');
     setSelectedEnhet(undefined);
     setDescription('');
-    setContactPerson('Frej Andreassen');
-    setEmail('frej.andreassen@falkenberg.se');
+    setContactPerson(mockCustomer.namn);
+    setPhone(mockCustomer.telefon);
+    setEmail(mockCustomer.epostAdress);
     setImage(null);
     setIsConfidential(false);
-  };
 
-  const handleMapSelect = (property: Objekt) => {
-    setSelectedObjektId(property.id);
-    setSelectedObjekt(property);
-    setSelectedUtrymmesId(''); // Reset room when property changes
-    setSelectedUtrymme(undefined);
+    // Notify parent that object was cleared
+    if (onObjektSelected) {
+      onObjektSelected(null);
+    }
+    if (onWorkOrdersLoaded) {
+      onWorkOrdersLoaded([]);
+    }
   };
 
   const handleObjektChange = (value: string) => {
@@ -230,6 +338,13 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     setSelectedObjekt(objekt);
     setSelectedUtrymmesId(''); // Reset room when property changes
     setSelectedUtrymme(undefined);
+
+    // Notify parent component of selected object
+    if (onObjektSelected && objekt) {
+      onObjektSelected({ id: objekt.id, namn: objekt.namn });
+    } else if (onObjektSelected && !objekt) {
+      onObjektSelected(null);
+    }
   };
 
   const handleUtrymmesChange = (value: string) => {
@@ -259,11 +374,6 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
     value: e.id,
     label: e.namn
   }));
-
-  const utrymmesTypeOptions = [
-    { value: 'inomhus', label: 'Inomhus' },
-    { value: 'utomhus', label: 'Utomhus' }
-  ];
 
   return (
     <>
@@ -305,26 +415,14 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <div className="flex gap-2 items-end">
-              <div className="flex-1">
-                <Combobox
-                  label="Fastighet / objekt"
-                  options={objektOptions}
-                  value={selectedObjektId}
-                  onChange={handleObjektChange}
-                  placeholder={isLoadingObjekt ? "Laddar fastigheter..." : "Sök fastighet..."}
-                  disabled={isLoadingObjekt}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsMapOpen(true)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors h-[42px] flex items-center gap-2"
-              >
-                <span>📍</span>
-                <span>Hitta på karta</span>
-              </button>
-            </div>
+            <Combobox
+              label="Objekt"
+              options={objektOptions}
+              value={selectedObjektId}
+              onChange={handleObjektChange}
+              placeholder={isLoadingObjekt ? "Laddar objekt..." : "Sök objekt..."}
+              disabled={isLoadingObjekt}
+            />
             {selectedObjekt && (
               <p className="text-sm text-gray-600 mt-2">
                 📍 {getAddressString(selectedObjekt.adress)}
@@ -335,41 +433,26 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
           <div>
             <Combobox
               label="Utrymme"
-              options={utrymmesTypeOptions}
-              value={utrymmesType}
-              onChange={(value) => setUtrymmesType(value as 'inomhus' | 'utomhus')}
-              placeholder="Välj utrymme..."
-            />
-          </div>
-
-          <div>
-            <Combobox
-              label="Lokal / rum"
               options={utrymmesComboboxOptions}
               value={selectedUtrymmesId}
               onChange={handleUtrymmesChange}
               placeholder={
-                !selectedObjektId ? "Välj fastighet först..." :
-                isLoadingUtrymmen ? "Laddar lokaler..." :
-                "Välj lokal..."
+                !selectedObjektId ? "Välj objekt först..." :
+                isLoadingUtrymmen ? "Laddar utrymmen..." :
+                "Välj utrymme..."
               }
               disabled={!selectedObjektId || isLoadingUtrymmen}
             />
-            {selectedObjektId && utrymmesOptions.length === 0 && !isLoadingUtrymmen && (
-              <p className="text-sm text-gray-500 mt-1">
-                Inga lokaler hittades för denna fastighet och utrymme.
-              </p>
-            )}
           </div>
 
           <div>
             <Combobox
-              label="Enhet / System"
+              label="Enhet"
               options={enhetComboboxOptions}
               value={selectedEnhetId}
               onChange={handleEnhetChange}
               placeholder={
-                !selectedUtrymmesId ? "Välj lokal först..." :
+                !selectedUtrymmesId ? "Välj utrymme först..." :
                 isLoadingEnheter ? "Laddar enheter..." :
                 "Välj enhet..."
               }
@@ -441,26 +524,45 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Kontaktperson</label>
-            <input
-              type="text"
-              value={contactPerson}
-              onChange={(e) => setContactPerson(e.target.value)}
-              placeholder="Namn på kontaktperson"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          <div className="border border-gray-200 rounded-md p-4 bg-gray-50">
+            <p className="text-sm text-gray-600 mb-3">
+              ℹ️ Kontaktuppgifter som tekniker kan kontakta vid felavhjälpning
+            </p>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">E-post</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="E-post till kontaktperson"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Kontaktperson</label>
+                <input
+                  type="text"
+                  value={contactPerson}
+                  onChange={(e) => setContactPerson(e.target.value)}
+                  placeholder="Namn på kontaktperson"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Telefonnummer</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Telefonnummer"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">E-post</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="E-post"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+            </div>
           </div>
 
           <div>
@@ -524,14 +626,6 @@ export default function ReportForm({ initialProperty = '', initialRoom = '' }: R
           </div>
         </form>
       </div>
-
-      <MapDialog
-        isOpen={isMapOpen}
-        onClose={() => setIsMapOpen(false)}
-        properties={objektList}
-        selectedProperty={selectedObjekt}
-        onSelectProperty={handleMapSelect}
-      />
     </>
   );
 }

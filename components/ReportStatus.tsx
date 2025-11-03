@@ -2,28 +2,87 @@
 
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/lib/apiClient';
-import type { WorkOrder } from '@/lib/mockStore';
 
-export default function ReportStatus() {
+// Work order type from FAST2 API
+interface WorkOrder {
+  arbetsorderId?: number;
+  id?: number;
+  objektId?: string;
+  objekt?: {
+    id?: string;
+  };
+  status?: {
+    statusKod?: string;
+    statusBesk?: string;
+  };
+  information?: {
+    beskrivning?: string;
+  };
+  arbetsorderTyp?: {
+    arbetsordertypKod?: string;
+    arbetsordertypBesk?: string;
+  };
+  prio?: {
+    prioKod?: string;
+    prioBesk?: string;
+  };
+  annanAnmalare?: {
+    namn?: string;
+  };
+  registrerad?: {
+    datumRegistrerad?: string;
+  };
+  externtNr?: string;
+}
+
+interface ReportStatusProps {
+  workOrders?: any[];
+  selectedObjekt?: { id: string; namn: string } | null;
+}
+
+export default function ReportStatus({ workOrders: externalWorkOrders, selectedObjekt }: ReportStatusProps) {
+  const [allWorkOrders, setAllWorkOrders] = useState<WorkOrder[]>([]);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'REG' | 'PAGAR'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'REG' | 'GODK' | 'PAGAR'>('all');
 
+  // Update work orders when external prop changes
   useEffect(() => {
-    loadWorkOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFilter]);
+    if (externalWorkOrders) {
+      console.log('[ReportStatus] Received work orders:', externalWorkOrders);
+      setAllWorkOrders(externalWorkOrders as WorkOrder[]);
+    } else {
+      setAllWorkOrders([]);
+    }
+  }, [externalWorkOrders]);
+
+  // Filter work orders based on selected tab
+  useEffect(() => {
+    if (selectedFilter === 'all') {
+      setWorkOrders(allWorkOrders);
+    } else {
+      const filtered = allWorkOrders.filter(order => order.status?.statusKod === selectedFilter);
+      setWorkOrders(filtered);
+    }
+  }, [allWorkOrders, selectedFilter]);
 
   const loadWorkOrders = async () => {
+    if (!selectedObjekt) {
+      console.warn('[ReportStatus] No object selected, cannot load work orders');
+      return;
+    }
+
     try {
       setIsLoading(true);
-      // BFF handles authentication - no need to login manually
+      setError('');
 
-      const filter = selectedFilter === 'all' ? {} : { statusKod: selectedFilter };
-      const response = await apiClient.listWorkOrders({ ...filter, limit: 10 });
+      // Fetch work orders for the selected object
+      const response = await apiClient.listWorkOrdersForObject(selectedObjekt.id);
 
-      setWorkOrders(response.workOrders);
+      // Update parent component with new data
+      console.log('[ReportStatus] Loaded work orders:', response);
+      setAllWorkOrders(Array.isArray(response) ? response : []);
     } catch (err) {
       console.error('Error loading work orders:', err);
       setError('Kunde inte ladda arbetsordrar');
@@ -32,18 +91,18 @@ export default function ReportStatus() {
     }
   };
 
-  const getStatusColor = (statusKod: string) => {
+  const getStatusName = (statusKod: string) => {
     switch (statusKod) {
       case 'REG':
-        return 'border-l-pink-400 bg-pink-50';
+        return 'Registrerad';
       case 'GODK':
-        return 'border-l-blue-400 bg-blue-50';
+        return 'Beställd';
       case 'PAGAR':
-        return 'border-l-orange-400 bg-orange-50';
+        return 'Accepterad';
       case 'UTFÖRD':
-        return 'border-l-green-400 bg-green-50';
+        return 'Utförd';
       default:
-        return 'border-l-gray-400 bg-gray-50';
+        return statusKod || 'Okänd status';
     }
   };
 
@@ -62,28 +121,26 @@ export default function ReportStatus() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('sv-SE', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Ärenden & status</h2>
-        <button
-          onClick={loadWorkOrders}
-          className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
-        >
-          <span>🔄</span>
-          <span>Uppdatera</span>
-        </button>
+        <div>
+          <h2 className="text-2xl font-bold">Ärenden & status</h2>
+          {selectedObjekt && (
+            <p className="text-sm text-gray-600 mt-1">
+              📍 {selectedObjekt.namn}
+            </p>
+          )}
+        </div>
+        {selectedObjekt && (
+          <button
+            onClick={loadWorkOrders}
+            className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+          >
+            <span>🔄</span>
+            <span>Uppdatera</span>
+          </button>
+        )}
       </div>
 
       <div className="flex gap-2 mb-6">
@@ -95,7 +152,7 @@ export default function ReportStatus() {
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Alla ({workOrders.length})
+          Alla ({allWorkOrders.length})
         </button>
         <button
           onClick={() => setSelectedFilter('REG')}
@@ -105,7 +162,17 @@ export default function ReportStatus() {
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Registrerad
+          Registrerad ({allWorkOrders.filter(o => o.status?.statusKod === 'REG').length})
+        </button>
+        <button
+          onClick={() => setSelectedFilter('GODK')}
+          className={`px-4 py-2 rounded-md font-semibold transition-colors ${
+            selectedFilter === 'GODK'
+              ? 'bg-pink-400 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Beställd ({allWorkOrders.filter(o => o.status?.statusKod === 'GODK').length})
         </button>
         <button
           onClick={() => setSelectedFilter('PAGAR')}
@@ -115,7 +182,7 @@ export default function ReportStatus() {
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Pågående
+          Accepterad ({allWorkOrders.filter(o => o.status?.statusKod === 'PAGAR').length})
         </button>
       </div>
 
@@ -130,47 +197,43 @@ export default function ReportStatus() {
         </div>
       ) : workOrders.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          <p>Inga arbetsordrar hittades</p>
+          <p>{selectedObjekt ? 'Inga arbetsordrar hittades' : 'Välj en fastighet för att se arbetsordrar'}</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {workOrders.map((order) => (
             <div
               key={order.id}
-              className={`border-l-4 ${getStatusColor(order.status.statusKod)} border border-gray-200 rounded-md p-4 hover:shadow-md transition-shadow cursor-pointer`}
+              className="border border-gray-200 rounded-md p-3 hover:shadow-sm transition-shadow"
             >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-semibold text-lg">
-                      #{order.id} - {order.information.beskrivning.substring(0, 50)}
-                      {order.information.beskrivning.length > 50 ? '...' : ''}
-                    </h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">
-                    📍 {order.objekt.namn}
-                    {order.utrymme && ` • ${order.utrymme.namn}`}
-                    {order.enhet && ` • ${order.enhet.namn}`}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <span className={`inline-block px-3 py-1 rounded text-sm font-medium ${getStatusBadgeColor(order.status.statusKod)}`}>
-                      {order.status.statusBesk}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-base mb-1">
+                    #{order.id} - {order.information?.beskrivning || 'Ingen beskrivning'}
+                  </h3>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${getStatusBadgeColor(order.status?.statusKod || '')}`}>
+                      {getStatusName(order.status?.statusKod || '')}
                     </span>
-                    <span className={`inline-block px-3 py-1 rounded text-sm font-medium ${
-                      order.prio.prioKod === '30' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
-                    }`}>
-                      {order.prio.prioBesk}
-                    </span>
+                    {order.prio && (
+                      <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                        order.prio.prioKod === '30' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
+                      }`}>
+                        {order.prio.prioBesk}
+                      </span>
+                    )}
                   </div>
                 </div>
-                <div className="text-right text-sm text-gray-600">
-                  {order.annanAnmalare && (
+                <div className="text-right text-xs text-gray-600 flex-shrink-0">
+                  {order.annanAnmalare?.namn && (
                     <div className="flex items-center gap-1 justify-end mb-1">
                       <span>👤</span>
                       <span>{order.annanAnmalare.namn}</span>
                     </div>
                   )}
-                  <div className="mt-1">{formatDate(order.registrerad.datumRegistrerad)}</div>
+                  {order.registrerad?.datumRegistrerad && (
+                    <div>{order.registrerad.datumRegistrerad}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -179,7 +242,12 @@ export default function ReportStatus() {
       )}
 
       <p className="text-sm text-gray-600 mt-6">
-        Visar {selectedFilter === 'all' ? 'alla' : selectedFilter === 'REG' ? 'registrerade' : 'pågående'} arbetsordrar.
+        Visar {
+          selectedFilter === 'all' ? 'alla' :
+          selectedFilter === 'REG' ? 'registrerade' :
+          selectedFilter === 'GODK' ? 'beställda' :
+          'accepterade'
+        } arbetsordrar.
       </p>
     </div>
   );

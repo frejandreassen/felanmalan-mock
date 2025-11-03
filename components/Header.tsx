@@ -1,6 +1,25 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Header() {
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout error:', error);
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3">
@@ -15,13 +34,24 @@ export default function Header() {
             </div>
           </Link>
 
-          <div className="flex items-center gap-2">
-            <input
-              type="search"
-              placeholder="Sök innehåll och kollega"
-              className="px-4 py-2 border border-gray-300 rounded-md w-64"
-            />
-            <button className="p-2 hover:bg-gray-100 rounded">🔍</button>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <input
+                type="search"
+                placeholder="Sök innehåll och kollega"
+                className="px-4 py-2 border border-gray-300 rounded-md w-64"
+              />
+              <button className="p-2 hover:bg-gray-100 rounded">🔍</button>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors disabled:opacity-50"
+              title="Logga ut"
+            >
+              {isLoggingOut ? '...' : 'Logga ut'}
+            </button>
           </div>
         </div>
       </div>

@@ -3,17 +3,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import QRCode from 'qrcode';
-import { getRoomsForProperty, categories } from '@/lib/data';
-import { objekt as objektList, type Objekt, getAddressString } from '@/lib/fastaStrukturenStore';
+import { apiClient } from '@/lib/apiClient';
+import type { Objekt, Utrymme, Enhet } from '@/lib/fastaStrukturenStore';
+import { getAddressString } from '@/lib/fastaStrukturenStore';
 import Combobox from '@/components/Combobox';
-import MapDialog from '@/components/MapDialog';
 
 export interface QRGeneratorWidgetProps {
   /** Base URL for the API endpoints */
   apiBaseUrl?: string;
-
-  /** Google Maps API key for map functionality */
-  googleMapsApiKey?: string;
 
   /** Base URL for generated QR codes (e.g., 'https://your-intranet.com') */
   baseUrl?: string;
@@ -45,49 +42,121 @@ export interface QRGeneratorWidgetProps {
  */
 export default function QRGeneratorWidget({
   apiBaseUrl,
-  googleMapsApiKey,
   baseUrl,
   className = ''
 }: QRGeneratorWidgetProps) {
-  const [selectedPropertyId, setSelectedPropertyId] = useState('');
-  const [selectedProperty, setSelectedProperty] = useState<Objekt | undefined>(undefined);
-  const [selectedLocation, setSelectedLocation] = useState('inomhus');
-  const [selectedRoom, setSelectedRoom] = useState('');
+  // Objekt state
+  const [objektList, setObjektList] = useState<Objekt[]>([]);
+  const [selectedObjektId, setSelectedObjektId] = useState('');
+  const [selectedObjekt, setSelectedObjekt] = useState<Objekt | undefined>(undefined);
+  const [isLoadingObjekt, setIsLoadingObjekt] = useState(false);
+
+  // Utrymme state
+  const [utrymmesOptions, setUtrymmesOptions] = useState<Utrymme[]>([]);
+  const [selectedUtrymmesId, setSelectedUtrymmesId] = useState('');
+  const [selectedUtrymme, setSelectedUtrymme] = useState<Utrymme | undefined>(undefined);
+  const [isLoadingUtrymmen, setIsLoadingUtrymmen] = useState(false);
+
+  // Enhet state
+  const [enheterOptions, setEnheterOptions] = useState<Enhet[]>([]);
+  const [selectedEnhetId, setSelectedEnhetId] = useState('');
+  const [selectedEnhet, setSelectedEnhet] = useState<Enhet | undefined>(undefined);
+  const [isLoadingEnheter, setIsLoadingEnheter] = useState(false);
+
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [generatedUrl, setGeneratedUrl] = useState('');
-  const [isMapOpen, setIsMapOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const printAreaRef = useRef<HTMLDivElement>(null);
 
-  // TODO: Use apiBaseUrl and googleMapsApiKey from props
-  const properties = objektList;
-
+  // Load objekt list on mount
   useEffect(() => {
-    if (selectedPropertyId) {
-      const prop = properties.find(p => p.id === selectedPropertyId);
-      setSelectedProperty(prop);
+    loadObjektList();
+  }, []);
+
+  // Load utrymmen when objekt changes
+  useEffect(() => {
+    if (selectedObjektId) {
+      loadUtrymmen(selectedObjektId);
+    } else {
+      setUtrymmesOptions([]);
+      setSelectedUtrymmesId('');
+      setSelectedUtrymme(undefined);
     }
-  }, [selectedPropertyId, properties]);
+  }, [selectedObjektId]);
 
-  const propertyOptions = properties.map(p => ({
-    value: p.id,
-    label: `${p.namn}${p.objektNr ? ` (${p.objektNr})` : ''}`
+  // Load enheter when utrymme changes
+  useEffect(() => {
+    if (selectedUtrymmesId) {
+      loadEnheter(selectedUtrymmesId);
+    } else {
+      setEnheterOptions([]);
+      setSelectedEnhetId('');
+      setSelectedEnhet(undefined);
+    }
+  }, [selectedUtrymmesId]);
+
+  const loadObjektList = async () => {
+    setIsLoadingObjekt(true);
+    try {
+      const response = await apiClient.listObjekt();
+      setObjektList(response.objekt || []);
+    } catch (error) {
+      console.error('Error loading objekt:', error);
+    } finally {
+      setIsLoadingObjekt(false);
+    }
+  };
+
+  const loadUtrymmen = async (objektId: string) => {
+    setIsLoadingUtrymmen(true);
+    try {
+      const response = await apiClient.listUtrymmen(objektId);
+      setUtrymmesOptions(response.utrymmen || []);
+
+      // Reset selected utrymme if it doesn't exist in new list
+      if (selectedUtrymmesId && !response.utrymmen?.find((u: Utrymme) => u.id === selectedUtrymmesId)) {
+        setSelectedUtrymmesId('');
+        setSelectedUtrymme(undefined);
+      }
+    } catch (error) {
+      console.error('Error loading utrymmen:', error);
+      setUtrymmesOptions([]);
+    } finally {
+      setIsLoadingUtrymmen(false);
+    }
+  };
+
+  const loadEnheter = async (utrymmesId: string) => {
+    setIsLoadingEnheter(true);
+    try {
+      const response = await apiClient.listEnheter(utrymmesId);
+      setEnheterOptions(response.enheter || []);
+    } catch (error) {
+      console.error('Error loading enheter:', error);
+      setEnheterOptions([]);
+    } finally {
+      setIsLoadingEnheter(false);
+    }
+  };
+
+  const objektOptions = objektList.map(o => ({
+    value: o.id,
+    label: `${o.namn}${o.objektNr ? ` (${o.objektNr})` : ''}`
   }));
 
-  const locationOptions = categories.map(c => ({
-    value: c.id,
-    label: c.name
+  const utrymmesComboboxOptions = utrymmesOptions.map(u => ({
+    value: u.id,
+    label: u.namn
   }));
 
-  const roomOptions = selectedProperty
-    ? getRoomsForProperty(selectedProperty.id, selectedProperty.kategori)
-        .filter(r => r.type === selectedLocation)
-        .map(r => ({ value: r.id, label: r.name }))
-    : [];
+  const enhetComboboxOptions = enheterOptions.map(e => ({
+    value: e.id,
+    label: e.namn
+  }));
 
   const generateQRCode = async () => {
-    if (!selectedProperty) {
-      alert('Vänligen välj en fastighet');
+    if (!selectedObjekt) {
+      alert('Vänligen välj ett objekt');
       return;
     }
 
@@ -95,10 +164,14 @@ export default function QRGeneratorWidget({
       // Build URL with query parameters
       const effectiveBaseUrl = baseUrl || (typeof window !== 'undefined' ? window.location.origin : '');
       const params = new URLSearchParams();
-      params.append('objekt', selectedProperty.id);
-      if (selectedRoom) {
-        const room = getRoomsForProperty(selectedProperty.id, selectedProperty.kategori).find(r => r.id === selectedRoom);
-        if (room) params.append('rum', room.id);
+      params.append('objekt', selectedObjekt.id);
+
+      if (selectedUtrymme) {
+        params.append('utrymme', selectedUtrymme.id);
+      }
+
+      if (selectedEnhet) {
+        params.append('enhet', selectedEnhet.id);
       }
 
       const url = `${effectiveBaseUrl}/?${params.toString()}`;
@@ -128,29 +201,35 @@ export default function QRGeneratorWidget({
   const downloadQRCode = () => {
     if (qrCodeUrl) {
       const link = document.createElement('a');
-      const filename = `QR-${selectedProperty?.objektNr || selectedProperty?.id}-${selectedRoom || 'alla'}.png`;
+      const filename = `QR-${selectedObjekt?.objektNr || selectedObjekt?.id}${selectedUtrymme ? `-${selectedUtrymme.id}` : ''}${selectedEnhet ? `-${selectedEnhet.id}` : ''}.png`;
       link.download = filename;
       link.href = qrCodeUrl;
       link.click();
     }
   };
 
-  const getRoomName = () => {
-    if (!selectedRoom || !selectedProperty) return '';
-    const room = getRoomsForProperty(selectedProperty.id, selectedProperty.kategori).find(r => r.id === selectedRoom);
-    return room?.name || '';
+  const handleObjektChange = (value: string) => {
+    setSelectedObjektId(value);
+    const objekt = objektList.find(o => o.id === value);
+    setSelectedObjekt(objekt);
+    setSelectedUtrymmesId(''); // Reset utrymme when objekt changes
+    setSelectedUtrymme(undefined);
+    setSelectedEnhetId(''); // Reset enhet
+    setSelectedEnhet(undefined);
   };
 
-  const getLocationName = () => {
-    const location = categories.find(c => c.id === selectedLocation);
-    return location?.name || '';
+  const handleUtrymmesChange = (value: string) => {
+    setSelectedUtrymmesId(value);
+    const utrymme = utrymmesOptions.find(u => u.id === value);
+    setSelectedUtrymme(utrymme);
+    setSelectedEnhetId(''); // Reset enhet when utrymme changes
+    setSelectedEnhet(undefined);
   };
 
-  const handleMapSelect = (property: Objekt) => {
-    setSelectedPropertyId(property.id);
-    setSelectedProperty(property);
-    setSelectedRoom('');
-    setIsMapOpen(false);
+  const handleEnhetChange = (value: string) => {
+    setSelectedEnhetId(value);
+    const enhet = enheterOptions.find(e => e.id === value);
+    setSelectedEnhet(enhet);
   };
 
   return (
@@ -190,61 +269,60 @@ export default function QRGeneratorWidget({
 
               <div className="space-y-6">
                 <div>
-                  <div className="flex gap-2 items-end">
-                    <div className="flex-1">
-                      <Combobox
-                        label="Fastighet / objekt"
-                        options={propertyOptions}
-                        value={selectedPropertyId}
-                        onChange={(value) => {
-                          setSelectedPropertyId(value);
-                          setSelectedRoom('');
-                        }}
-                        placeholder="Sök fastighet..."
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setIsMapOpen(true)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors h-[42px] flex items-center gap-2"
-                    >
-                      <span>📍</span>
-                      <span>Hitta på karta</span>
-                    </button>
-                  </div>
-                  {selectedProperty && (
+                  <Combobox
+                    label="Objekt"
+                    options={objektOptions}
+                    value={selectedObjektId}
+                    onChange={handleObjektChange}
+                    placeholder={isLoadingObjekt ? "Laddar objekt..." : "Sök objekt..."}
+                    disabled={isLoadingObjekt}
+                  />
+                  {selectedObjekt && (
                     <p className="text-sm text-gray-600 mt-2">
-                      📍 {getAddressString(selectedProperty.adress)}
+                      📍 {getAddressString(selectedObjekt.adress)}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <Combobox
-                    label="Utrymme"
-                    options={locationOptions}
-                    value={selectedLocation}
-                    onChange={setSelectedLocation}
-                    placeholder="Välj utrymme..."
+                    label="Utrymme (valfritt)"
+                    options={utrymmesComboboxOptions}
+                    value={selectedUtrymmesId}
+                    onChange={handleUtrymmesChange}
+                    placeholder={
+                      !selectedObjektId ? "Välj objekt först..." :
+                      isLoadingUtrymmen ? "Laddar utrymmen..." :
+                      "Välj utrymme..."
+                    }
+                    disabled={!selectedObjektId || isLoadingUtrymmen}
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Om du inte väljer utrymme kommer användaren att kunna välja själv
+                  </p>
                 </div>
 
                 <div>
                   <Combobox
-                    label="Lokal / rum (valfritt)"
-                    options={roomOptions}
-                    value={selectedRoom}
-                    onChange={setSelectedRoom}
-                    placeholder="Välj lokal..."
+                    label="Enhet (valfritt)"
+                    options={enhetComboboxOptions}
+                    value={selectedEnhetId}
+                    onChange={handleEnhetChange}
+                    placeholder={
+                      !selectedUtrymmesId ? "Välj utrymme först..." :
+                      isLoadingEnheter ? "Laddar enheter..." :
+                      "Välj enhet..."
+                    }
+                    disabled={!selectedUtrymmesId || isLoadingEnheter}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Om du inte väljer lokal kommer användaren att kunna välja själv
+                    Om du inte väljer enhet kommer användaren att kunna välja själv
                   </p>
                 </div>
 
                 <button
                   onClick={generateQRCode}
-                  disabled={!selectedProperty}
+                  disabled={!selectedObjekt}
                   className="w-full bg-pink-400 text-white py-3 px-6 rounded-md font-semibold hover:bg-pink-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                   Generera QR-kod
@@ -279,21 +357,28 @@ export default function QRGeneratorWidget({
 
                     <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                       <p className="text-lg font-semibold text-gray-900 mb-1">
-                        {selectedProperty?.namn}
+                        {selectedObjekt?.namn}
                       </p>
-                      {selectedProperty?.objektNr && (
+                      {selectedObjekt?.objektNr && (
                         <p className="text-sm text-gray-600 mb-1">
-                          {selectedProperty.objektNr}
+                          {selectedObjekt.objektNr}
                         </p>
                       )}
                       <p className="text-sm text-gray-600 mb-2">
-                        {selectedProperty && getAddressString(selectedProperty.adress)}
+                        {selectedObjekt && getAddressString(selectedObjekt.adress)}
                       </p>
-                      {selectedRoom && (
+                      {(selectedUtrymme || selectedEnhet) && (
                         <div className="mt-3 pt-3 border-t border-gray-200">
-                          <p className="text-sm font-semibold text-gray-700">
-                            {getLocationName()} • {getRoomName()}
-                          </p>
+                          {selectedUtrymme && (
+                            <p className="text-sm font-semibold text-gray-700">
+                              Utrymme: {selectedUtrymme.namn}
+                            </p>
+                          )}
+                          {selectedEnhet && (
+                            <p className="text-sm font-semibold text-gray-700">
+                              Enhet: {selectedEnhet.namn}
+                            </p>
+                          )}
                         </div>
                       )}
                     </div>
@@ -333,7 +418,7 @@ export default function QRGeneratorWidget({
                   </div>
                 ) : (
                   <div className="text-center py-12 text-gray-500">
-                    <p className="text-lg mb-2">Välj fastighet och generera QR-kod</p>
+                    <p className="text-lg mb-2">Välj objekt och generera QR-kod</p>
                     <p className="text-sm">QR-koden kommer att visas här</p>
                   </div>
                 )}
@@ -347,7 +432,7 @@ export default function QRGeneratorWidget({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-blue-800">
               <div>
                 <h4 className="font-semibold mb-2">1. Generera QR-kod</h4>
-                <p>Välj fastighet och eventuellt specifik lokal/rum. Klicka på &quot;Generera QR-kod&quot;.</p>
+                <p>Välj objekt och eventuellt specifikt utrymme/enhet. Klicka på &quot;Generera QR-kod&quot;.</p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">2. Skriv ut eller ladda ner</h4>
@@ -364,14 +449,6 @@ export default function QRGeneratorWidget({
             </div>
           </div>
         </div>
-
-        <MapDialog
-          isOpen={isMapOpen}
-          onClose={() => setIsMapOpen(false)}
-          properties={properties}
-          selectedProperty={selectedProperty}
-          onSelectProperty={handleMapSelect}
-        />
       </div>
     </>
   );

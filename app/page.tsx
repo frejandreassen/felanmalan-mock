@@ -10,22 +10,33 @@ import ApiLog from '@/components/ApiLog';
 function HomeContent() {
   const searchParams = useSearchParams();
   const [initialProperty, setInitialProperty] = useState('');
-  const [initialRoom, setInitialRoom] = useState('');
+  const [initialUtrymme, setInitialUtrymme] = useState('');
+  const [initialEnhet, setInitialEnhet] = useState('');
+  const [workOrders, setWorkOrders] = useState<any[]>([]);
+  const [selectedObjekt, setSelectedObjekt] = useState<{ id: string; namn: string } | null>(null);
 
   useEffect(() => {
-    // Read URL parameters for deep linking
+    // Read URL parameters for deep linking (from QR codes)
     const objekt = searchParams.get('objekt');
-    const rum = searchParams.get('rum');
+    const utrymme = searchParams.get('utrymme');
+    const enhet = searchParams.get('enhet');
 
     if (objekt) setInitialProperty(objekt);
-    if (rum) setInitialRoom(rum);
+    if (utrymme) setInitialUtrymme(utrymme);
+    if (enhet) setInitialEnhet(enhet);
   }, [searchParams]);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <ReportForm initialProperty={initialProperty} initialRoom={initialRoom} />
-        <ReportStatus />
+        <ReportForm
+          initialProperty={initialProperty}
+          initialUtrymme={initialUtrymme}
+          initialEnhet={initialEnhet}
+          onWorkOrdersLoaded={setWorkOrders}
+          onObjektSelected={setSelectedObjekt}
+        />
+        <ReportStatus workOrders={workOrders} selectedObjekt={selectedObjekt} />
       </div>
     </div>
   );
