@@ -230,6 +230,9 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
 
       // Step 2: Build work order payload
       // Minimal payload based on API team feedback
+      // Strip phone numbers to only digits
+      const cleanPhone = (phoneStr: string) => phoneStr.replace(/[^\d]/g, '');
+
       // Check if contact person is different from anmalare (logged-in user)
       const contactIsDifferent =
         contactPerson !== mockCustomer.namn ||
@@ -251,15 +254,12 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
           finalDescription += `Namn: ${contactPerson}\n`;
         }
         if (phone && phone !== mockCustomer.telefon) {
-          finalDescription += `Telefon: ${phone}\n`;
+          finalDescription += `Telefon: ${cleanPhone(phone)}\n`;
         }
         if (email && email !== mockCustomer.epostAdress) {
           finalDescription += `E-post: ${email}`;
         }
       }
-
-      // Strip phone numbers to only digits
-      const cleanPhone = (phoneStr: string) => phoneStr.replace(/[^\d]/g, '');
 
       const workOrderPayload: any = {
         arbetsordertypKod: orderType === 'felanmalan' ? 'F' : 'G', // F = Felanmälan, G = Beställning
