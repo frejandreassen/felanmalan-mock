@@ -258,6 +258,9 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
         }
       }
 
+      // Strip phone numbers to only digits
+      const cleanPhone = (phoneStr: string) => phoneStr.replace(/[^\d]/g, '');
+
       const workOrderPayload: any = {
         arbetsordertypKod: orderType === 'felanmalan' ? 'F' : 'G', // F = Felanmälan, G = Beställning
         kundNr: process.env.NEXT_PUBLIC_KUND_NR || 'SERVA10311',
@@ -268,10 +271,17 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
         },
         anmalare: {
           namn: mockCustomer.namn, // Always use logged-in user as anmalare
-          telefon: mockCustomer.telefon,
+          telefon: cleanPhone(mockCustomer.telefon),
           epostAdress: mockCustomer.epostAdress
         }
       };
+
+      // Add fakturera property for beställningar (type G)
+      if (orderType === 'bestallning') {
+        workOrderPayload.fakturera = {
+          faktureras: 'true'
+        };
+      }
 
       // Add optional fields only if they have values
       if (isConfidential) {
