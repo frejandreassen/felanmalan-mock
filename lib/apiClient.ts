@@ -40,7 +40,7 @@ class ApiClient {
   // Upload temporary file (returns fileName to attach to work order)
   async uploadTempFile(file: File): Promise<{ fileName: string }> {
     const formData = new FormData();
-    formData.append('tempFile', file);
+    formData.append('file', file);
 
     const response = await fetch(`${BFF_BASE_URL}/ao-produkt/v1/filetransfer/tempfile`, {
       method: 'POST',
@@ -60,6 +60,37 @@ class ApiClient {
 
     if (!response.ok) {
       throw new Error(data.error || 'Failed to upload file');
+    }
+
+    return data;
+  }
+
+  // Attach files to work order
+  async attachFilesToWorkOrder(arbetsorderId: string, filePayload: {
+    fil: Array<{
+      filnamn: string;
+      beskrivning?: string;
+      typ: string;
+    }>;
+  }) {
+    const response = await fetch(`${BFF_BASE_URL}/ao-produkt/v1/arbetsorder/${arbetsorderId}/filer`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(filePayload),
+    });
+
+    const data = await response.json();
+
+    apiLogger?.log({
+      method: 'POST',
+      endpoint: `/api/bff/ao-produkt/v1/arbetsorder/${arbetsorderId}/filer`,
+      status: response.status,
+      requestBody: filePayload,
+      responseBody: data,
+    });
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to attach files to work order');
     }
 
     return data;

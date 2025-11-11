@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Combobox from './Combobox';
 import { apiClient } from '@/lib/apiClient';
 import type { Objekt, Utrymme, Enhet } from '@/lib/fastaStrukturenStore';
@@ -47,12 +47,17 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
   const [contactPerson, setContactPerson] = useState(mockCustomer.namn);
   const [phone, setPhone] = useState(mockCustomer.telefon);
   const [email, setEmail] = useState(mockCustomer.epostAdress);
-  const [image, setImage] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState('');
+  const [fileUploadStatus, setFileUploadStatus] = useState<'none' | 'partial' | 'success'>('none');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [workOrderNumber, setWorkOrderNumber] = useState('');
   const [isConfidential, setIsConfidential] = useState(false);
+
+  // File input ref for clearing after submit
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load objekt list on mount
   useEffect(() => {
@@ -188,6 +193,42 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    setFileError('');
+
+    // Validate number of files
+    if (selectedFiles.length > 5) {
+      setFileError('Max 5 filer kan laddas upp');
+      return;
+    }
+
+    // Validate file types and sizes
+    const maxSize = 4 * 1024 * 1024; // 4MB in bytes
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
+
+    for (const file of selectedFiles) {
+      // Check file size
+      if (file.size > maxSize) {
+        setFileError(`Filen "${file.name}" är för stor (max 4MB)`);
+        return;
+      }
+
+      // Check file type
+      if (!allowedTypes.includes(file.type)) {
+        setFileError(`Filen "${file.name}" har ett ogiltigt format. Endast bilder och PDF tillåts.`);
+        return;
+      }
+    }
+
+    setFiles(selectedFiles);
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+    setFileError('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -209,26 +250,12 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
     setIsSubmitting(true);
     setSubmitError('');
     setSubmitSuccess(false);
+    setFileUploadStatus('none');
 
     try {
       // BFF handles authentication - no need to login manually
 
-      // Step 1: Upload file if present
-      let uploadedFileName: string | undefined;
-      if (image) {
-        try {
-          const uploadResult = await apiClient.uploadTempFile(image);
-          uploadedFileName = uploadResult.fileName;
-          console.log('[ReportForm] File uploaded:', uploadedFileName);
-        } catch (error) {
-          console.error('[ReportForm] File upload failed:', error);
-          setSubmitError('Kunde inte ladda upp bild. Försök igen.');
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
-      // Step 2: Build work order payload
+      // Step 1: Build work order payload
       // Minimal payload based on API team feedback
       // Strip phone numbers to only digits
       const cleanPhone = (phoneStr: string) => phoneStr.replace(/[^\d]/g, '');
@@ -296,17 +323,45 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
         workOrderPayload.enhetsId = parseInt(selectedEnhet.id);
       }
 
-      // Create work order
+      // Step 2: Create work order
       const workOrder = await apiClient.createWorkOrder(workOrderPayload);
+      const arbetsorderId = workOrder.arbetsorderId || workOrder.id;
 
-      setWorkOrderNumber(workOrder.arbetsorderId || workOrder.id);
+      setWorkOrderNumber(arbetsorderId);
       setSubmitSuccess(true);
+
+      // Step 3: Upload and attach files if present
+      if (files.length > 0) {
+        try {
+          // Upload each file to tempfile endpoint
+          const uploadPromises = files.map(file => apiClient.uploadTempFile(file));
+          const uploadResults = await Promise.all(uploadPromises);
+
+          // Build file attachment payload
+          const filePayload = {
+            fil: uploadResults.map(result => ({
+              filnamn: result.fileName,
+              typ: 'DOKEXTIMG'
+            }))
+          };
+
+          // Attach files to work order
+          await apiClient.attachFilesToWorkOrder(arbetsorderId, filePayload);
+          setFileUploadStatus('success');
+          console.log('[ReportForm] Files attached successfully');
+        } catch (error) {
+          console.error('[ReportForm] File attachment failed:', error);
+          setFileUploadStatus('partial');
+          // Don't fail the whole operation - work order was created successfully
+        }
+      }
 
       // Reset form after successful submission
       setTimeout(() => {
         handleReset();
         setSubmitSuccess(false);
         setWorkOrderNumber('');
+        setFileUploadStatus('none');
       }, 5000);
 
     } catch (error) {
@@ -330,8 +385,15 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
     setContactPerson(mockCustomer.namn);
     setPhone(mockCustomer.telefon);
     setEmail(mockCustomer.epostAdress);
-    setImage(null);
+    setFiles([]);
+    setFileError('');
+    setFileUploadStatus('none');
     setIsConfidential(false);
+
+    // Clear file input element
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
 
     // Notify parent that object was cleared
     if (onObjektSelected) {
@@ -403,6 +465,16 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
                 <p className="text-sm text-green-700 mt-1">
                   {orderType === 'felanmalan' ? 'Din felanmälan' : 'Din beställning'} har registrerats med ärendenummer: <strong>{workOrderNumber}</strong>
                 </p>
+                {fileUploadStatus === 'success' && (
+                  <p className="text-sm text-green-700 mt-1">
+                    📎 Filer uppladdade
+                  </p>
+                )}
+                {fileUploadStatus === 'partial' && (
+                  <p className="text-sm text-orange-600 mt-1">
+                    ⚠️ Arbetsorder skapad, men filer kunde inte laddas upp
+                  </p>
+                )}
                 <p className="text-sm text-green-600 mt-2">
                   Formuläret rensas automatiskt om 5 sekunder...
                 </p>
@@ -471,7 +543,9 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Beskrivning</label>
+            <label className="block text-sm font-medium mb-1">
+              Beskrivning <span className="text-red-500">*</span>
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -481,6 +555,7 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
                   : "Beskriv beställningen..."
               }
               rows={4}
+              required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -576,17 +651,50 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Ladda upp bild (valfritt)</label>
+            <label className="block text-sm font-medium mb-1">Ladda upp filer (valfritt)</label>
             <input
+              ref={fileInputRef}
               type="file"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
+              multiple
+              accept="image/*,application/pdf"
+              onChange={handleFileChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {image && (
-              <p className="text-sm text-green-600 mt-1">
-                ✓ Bild vald: {image.name}
+            <p className="text-xs text-gray-500 mt-1">
+              Max 5 filer, 4MB per fil. Bilder och PDF tillåts.
+            </p>
+
+            {fileError && (
+              <p className="text-sm text-red-600 mt-2">
+                ⚠️ {fileError}
               </p>
+            )}
+
+            {files.length > 0 && (
+              <div className="mt-3 space-y-2">
+                {files.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <span className="text-lg">
+                        {file.type === 'application/pdf' ? '📄' : '🖼️'}
+                      </span>
+                      <span className="text-sm text-gray-700 truncate">
+                        {file.name}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFile(index)}
+                      className="text-red-500 hover:text-red-700 ml-2 text-sm font-medium"
+                    >
+                      Ta bort
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 

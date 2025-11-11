@@ -48,7 +48,24 @@ async function handleRequest(
 
     // Route to FAST2 API (with OAuth2)
     const response = await proxyToRealApi(fullPath, method, body);
-    const data = await response.json();
+
+    // Handle empty response bodies (e.g., 201 Created with no content)
+    const contentType = response.headers.get('content-type');
+    const contentLength = response.headers.get('content-length');
+
+    let data;
+    if (contentLength === '0' || !contentType?.includes('application/json')) {
+      // Empty response or non-JSON response
+      data = null;
+    } else {
+      try {
+        const text = await response.text();
+        data = text ? JSON.parse(text) : null;
+      } catch (error) {
+        console.log('[BFF] Could not parse response as JSON, returning null');
+        data = null;
+      }
+    }
 
     // Filter out confidential work orders from list responses
     if (method === 'GET' && fullPath.includes('/arbetsorder') && Array.isArray(data)) {
