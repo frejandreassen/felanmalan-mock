@@ -218,10 +218,19 @@ class ApiClient {
 
   // List work orders for a specific object (real API format)
   async listWorkOrdersForObject(objektId: string, offset = 0) {
-    // Test: Fetch all work orders without filters
-    const endpoint = `/api/bff/ao-produkt/v1/arbetsorder`;
+    const params = new URLSearchParams();
+    params.append('objektId', objektId);
+    params.append('status', 'PAGAR,REG,GODK');
+    params.append('feltyp', 'F,U,T');
 
-    console.log('[ApiClient] Fetching ALL work orders (no filters):', endpoint);
+    if (offset > 0) {
+      params.append('offset', offset.toString());
+    }
+
+    const queryString = params.toString();
+    const endpoint = `/api/bff/ao-produkt/v1/arbetsorder?${queryString}`;
+
+    console.log('[ApiClient] Fetching work orders for objektId:', objektId, 'endpoint:', endpoint);
 
     const response = await fetch(endpoint, {
       method: 'GET',
