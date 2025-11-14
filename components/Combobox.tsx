@@ -70,7 +70,7 @@ export default function Combobox({ options, value, onChange, placeholder = '', l
           onFocus={() => !disabled && setIsOpen(true)}
           placeholder={placeholder}
           disabled={disabled}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white pr-8 disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white pr-8 disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-700"
         />
         <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
           <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
@@ -85,8 +85,8 @@ export default function Combobox({ options, value, onChange, placeholder = '', l
             <div
               key={option.value}
               onClick={() => handleSelect(option)}
-              className={`px-3 py-2 cursor-pointer hover:bg-gray-100 ${
-                option.value === value ? 'bg-blue-50' : ''
+              className={`px-3 py-2 cursor-pointer hover:bg-gray-100 text-gray-900 ${
+                option.value === value ? 'bg-blue-50 font-semibold' : ''
               }`}
             >
               {option.label}
