@@ -524,7 +524,7 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
                 utrymmesComboboxOptions.length === 0 ? "Inga utrymmen registrerade" :
                 "Välj utrymme..."
               }
-              disabled={!selectedObjektId || isLoadingUtrymmen}
+              disabled={!selectedObjektId || isLoadingUtrymmen || utrymmesComboboxOptions.length === 0}
             />
             {selectedObjektId && !isLoadingUtrymmen && utrymmesComboboxOptions.length === 0 && (
               <p className="text-sm text-gray-600 mt-2">
@@ -545,7 +545,7 @@ export default function ReportForm({ initialProperty = '', initialUtrymme = '', 
                 enhetComboboxOptions.length === 0 ? "Inga enheter registrerade" :
                 "Välj enhet..."
               }
-              disabled={!selectedUtrymmesId || isLoadingEnheter}
+              disabled={!selectedUtrymmesId || isLoadingEnheter || enhetComboboxOptions.length === 0}
             />
             {selectedUtrymmesId && !isLoadingEnheter && enhetComboboxOptions.length === 0 && (
               <p className="text-sm text-gray-600 mt-2">
